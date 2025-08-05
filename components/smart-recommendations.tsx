@@ -12,7 +12,8 @@ import {
   FinancialInsight, 
   SmartNudge, 
   ActionItem,
-  UserProfile 
+  UserProfile,
+  GoalPriority
 } from "@/lib/smart-recommendations"
 import { GoalTemplates } from "@/components/goal-templates"
 import { useCurrency } from "@/contexts/currency-context"
@@ -37,17 +38,26 @@ import {
   ArrowRight,
   Star,
   Zap,
-  BookOpen
+  BookOpen,
+  BarChart3,
+  CheckSquare
 } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface SmartRecommendationsProps {
   userProfile: UserProfile
-  existingGoals: any[]
-  onGoalCreate: (goal: any) => void
+  existingGoals: GoalSuggestion[]
+  onGoalCreate: (goal: GoalSuggestion) => void
 }
 
 export function SmartRecommendations({ userProfile, existingGoals, onGoalCreate }: SmartRecommendationsProps) {
-  const [recommendations, setRecommendations] = useState<any>(null)
+  const [recommendations, setRecommendations] = useState<{
+    suggestions: GoalSuggestion[]
+    priorities: GoalPriority[]
+    insights: FinancialInsight[]
+    nudges: SmartNudge[]
+    actions: ActionItem[]
+  } | null>(null)
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'suggestions' | 'insights' | 'actions' | 'templates'>('suggestions')
   const { formatCurrency } = useCurrency()
@@ -123,7 +133,7 @@ export function SmartRecommendations({ userProfile, existingGoals, onGoalCreate 
       </div>
 
       {/* Smart Nudges */}
-      {recommendations.nudges.length > 0 && (
+      {recommendations?.nudges && recommendations.nudges.length > 0 && (
         <div className="space-y-3">
           {recommendations.nudges.map((nudge: SmartNudge, index: number) => (
             <Alert key={index} className={getNudgeColor(nudge.type)}>
@@ -142,198 +152,157 @@ export function SmartRecommendations({ userProfile, existingGoals, onGoalCreate 
         </div>
       )}
 
-      {/* Tab Navigation */}
-      <div className="flex space-x-1 bg-gray-800 p-1 rounded-lg">
-        <Button
-          variant={activeTab === 'suggestions' ? 'default' : 'ghost'}
-          size="sm"
-          onClick={() => setActiveTab('suggestions')}
-          className="flex-1"
-        >
-          <Target className="h-4 w-4 mr-2" />
-          Goal Suggestions
-          <Badge variant="secondary" className="ml-2">
-            {recommendations.suggestions.length}
-          </Badge>
-        </Button>
-        <Button
-          variant={activeTab === 'insights' ? 'default' : 'ghost'}
-          size="sm"
-          onClick={() => setActiveTab('insights')}
-          className="flex-1"
-        >
-          <TrendingUp className="h-4 w-4 mr-2" />
-          Financial Insights
-          <Badge variant="secondary" className="ml-2">
-            {recommendations.insights.length}
-          </Badge>
-        </Button>
-        <Button
-          variant={activeTab === 'actions' ? 'default' : 'ghost'}
-          size="sm"
-          onClick={() => setActiveTab('actions')}
-          className="flex-1"
-        >
-          <Lightbulb className="h-4 w-4 mr-2" />
-          Action Items
-          <Badge variant="secondary" className="ml-2">
-            {recommendations.actions.length}
-          </Badge>
-        </Button>
-        <Button
-          variant={activeTab === 'templates' ? 'default' : 'ghost'}
-          size="sm"
-          onClick={() => setActiveTab('templates')}
-          className="flex-1"
-        >
-          <BookOpen className="h-4 w-4 mr-2" />
-          Templates
-          <Badge variant="secondary" className="ml-2">
-            New
-          </Badge>
-        </Button>
-      </div>
+      {/* Tabs */}
+      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)}>
+        <TabsList className="grid w-full grid-cols-4 bg-gray-800">
+          <TabsTrigger value="suggestions" className="data-[state=active]:bg-blue-600">Suggestions</TabsTrigger>
+          <TabsTrigger value="insights" className="data-[state=active]:bg-blue-600">Insights</TabsTrigger>
+          <TabsTrigger value="actions" className="data-[state=active]:bg-blue-600">Actions</TabsTrigger>
+          <TabsTrigger value="templates" className="data-[state=active]:bg-blue-600">Templates</TabsTrigger>
+        </TabsList>
 
-      {/* Tab Content */}
-      {activeTab === 'suggestions' && (
-        <div className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {recommendations.suggestions.map((suggestion: GoalSuggestion) => (
-              <Card key={suggestion.id} className="hover:shadow-lg transition-shadow bg-gray-900 border-gray-700">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-2xl">{suggestion.icon}</span>
+        {/* Suggestions Tab */}
+        <TabsContent value="suggestions" className="space-y-4">
+          {recommendations?.suggestions && recommendations.suggestions.length > 0 ? (
+            <div className="grid gap-4">
+              {recommendations.suggestions.map((suggestion: GoalSuggestion) => (
+                <Card key={suggestion.id} className="bg-gray-800 border-gray-700">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <span className="text-2xl">{suggestion.icon}</span>
+                        <div>
+                          <CardTitle className="text-gray-100">{suggestion.name}</CardTitle>
+                          <p className="text-sm text-gray-400">{suggestion.category}</p>
+                        </div>
+                      </div>
+                      <Badge className={getPriorityColor(suggestion.priority)}>
+                        {suggestion.priority}
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <CardTitle className="text-lg text-gray-100">{suggestion.name}</CardTitle>
-                        <CardDescription className="text-gray-400">{suggestion.category}</CardDescription>
+                        <p className="text-gray-400">Suggested Amount</p>
+                        <p className="font-semibold text-gray-100">{formatCurrency(suggestion.suggestedAmount)}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400">Time to Complete</p>
+                        <p className="font-semibold text-gray-100">{suggestion.timeToComplete} months</p>
                       </div>
                     </div>
-                    <Badge className={getPriorityColor(suggestion.priority)}>
-                      {suggestion.priority}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-400">Suggested Amount</span>
-                      <span className="font-semibold">
-                        {formatCurrency(suggestion.suggestedAmount)}
-                      </span>
+                    <p className="text-sm text-gray-300">{suggestion.reasoning}</p>
+                    <div className="flex items-center justify-between">
+                      <Badge variant="outline" className="border-gray-600 text-gray-300">
+                        Confidence: {suggestion.confidence}%
+                      </Badge>
+                      <Button size="sm" onClick={() => onGoalCreate(suggestion)}>
+                        <Plus className="mr-1 h-4 w-4" />
+                        Create Goal
+                      </Button>
                     </div>
-                    <div className="flex items-center justify-between text-sm mt-1">
-                      <span className="text-gray-400">Time to Complete</span>
-                      <span className="font-semibold">{suggestion.timeToComplete} months</span>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <Card className="bg-gray-800 border-gray-700">
+              <CardContent className="text-center py-8">
+                <Target className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-400">No suggestions available. Complete your profile to get personalized recommendations.</p>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+
+        {/* Insights Tab */}
+        <TabsContent value="insights" className="space-y-4">
+          {recommendations?.insights && recommendations.insights.length > 0 ? (
+            <div className="grid gap-4">
+              {recommendations.insights.map((insight: FinancialInsight, index: number) => (
+                <Card key={index} className="bg-gray-800 border-gray-700">
+                  <CardHeader>
+                    <CardTitle className="text-gray-100">{insight.title}</CardTitle>
+                    <p className="text-sm text-gray-400">{insight.description}</p>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between">
+                      <div className="text-2xl font-bold text-gray-100">{insight.value.toFixed(1)}</div>
+                      <Badge className={getStatusColor(insight.status)}>
+                        {insight.status}
+                      </Badge>
                     </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2">
-                    <Star className="h-4 w-4 text-yellow-500" />
-                    <span className="text-sm text-gray-400">
-                      {suggestion.confidence}% confidence
-                    </span>
-                  </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <Card className="bg-gray-800 border-gray-700">
+              <CardContent className="text-center py-8">
+                <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-400">No insights available. Complete your profile to get financial insights.</p>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
 
-                  <p className="text-sm text-gray-400 leading-relaxed">
-                    {suggestion.reasoning}
-                  </p>
-
-                  <Button 
-                    onClick={() => onGoalCreate(suggestion)}
-                    className="w-full"
-                    size="sm"
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Create Goal
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'insights' && (
-        <div className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {recommendations.insights.map((insight: FinancialInsight) => (
-              <Card key={insight.type} className="bg-gray-900 border-gray-700">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg text-gray-100">{insight.title}</CardTitle>
-                    <div className={`p-2 rounded-full ${getStatusColor(insight.status)}`}>
-                      {insight.status === 'good' && <CheckCircle className="h-5 w-5" />}
-                      {insight.status === 'warning' && <AlertTriangle className="h-5 w-5" />}
-                      {insight.status === 'critical' && <AlertTriangle className="h-5 w-5" />}
+        {/* Actions Tab */}
+        <TabsContent value="actions" className="space-y-4">
+          {recommendations?.actions && recommendations.actions.length > 0 ? (
+            <div className="grid gap-4">
+              {recommendations.actions.map((action: ActionItem) => (
+                <Card key={action.id} className="bg-gray-800 border-gray-700">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-gray-100">{action.title}</CardTitle>
+                      <Badge className={getPriorityColor(action.priority)}>
+                        {action.priority}
+                      </Badge>
                     </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <p className="text-sm text-gray-400">{insight.description}</p>
-                  
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-300">Current</span>
-                      <span className="font-semibold">{insight.value.toFixed(1)}</span>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-gray-300 mb-4">{action.description}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-400">{action.action}</span>
+                      <Badge variant="outline" className="border-gray-600 text-gray-300">
+                        Impact: {action.estimatedImpact}%
+                      </Badge>
                     </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-300">Target</span>
-                      <span className="font-semibold">{insight.target}</span>
-                    </div>
-                    <Progress 
-                      value={(insight.value / insight.target) * 100} 
-                      className="h-2"
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <Card className="bg-gray-800 border-gray-700">
+              <CardContent className="text-center py-8">
+                <CheckSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-400">No actions available. Complete your profile to get action items.</p>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
 
-      {activeTab === 'actions' && (
-        <div className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2">
-            {recommendations.actions.map((action: ActionItem) => (
-              <Card key={action.id} className="hover:shadow-lg transition-shadow bg-gray-900 border-gray-700">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg text-gray-100">{action.title}</CardTitle>
-                    <Badge className={getPriorityColor(action.priority)}>
-                      {action.priority}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-sm text-gray-400">{action.description}</p>
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <Zap className="h-4 w-4 text-blue-500" />
-                      <span className="text-sm text-gray-400">
-                        Estimated Impact: {action.estimatedImpact}%
-                      </span>
-                    </div>
-                  </div>
-
-                  <Button variant="outline" className="w-full" size="sm">
-                    <ArrowRight className="h-4 w-4 mr-2" />
-                    {action.action}
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      )}
-
-             {activeTab === 'templates' && (
-         <div className="space-y-4">
-           <GoalTemplates onGoalCreate={onGoalCreate} userProfile={userProfile} />
-         </div>
-       )}
+        {/* Templates Tab */}
+        <TabsContent value="templates" className="space-y-4">
+          <GoalTemplates userProfile={userProfile} onGoalCreate={(goal) => {
+            // Convert template goal to GoalSuggestion format
+            const suggestion: GoalSuggestion = {
+              id: `template-${Date.now()}`,
+              name: goal.name,
+              type: 'savings' as any,
+              priority: 'medium',
+              suggestedAmount: goal.targetAmount,
+              reasoning: `Template goal: ${goal.name}`,
+              timeToComplete: 12,
+              category: goal.category,
+              icon: '🎯',
+              confidence: 80
+            }
+            onGoalCreate(suggestion)
+          }} />
+        </TabsContent>
+      </Tabs>
     </div>
   )
 } 

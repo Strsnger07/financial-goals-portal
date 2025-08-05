@@ -22,7 +22,7 @@ interface Goal {
   targetAmount: number
   contributed: number
   category: string
-  createdAt: any
+  createdAt: Date | { toDate: () => Date }
 }
 
 interface GoalChartsProps {
@@ -74,7 +74,7 @@ export function GoalCharts({ goals }: GoalChartsProps) {
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip formatter={(value: any) => [`${formatCurrency(Number(value))}`, "Contributed"]} />
+              <Tooltip formatter={(value: unknown) => [`${formatCurrency(Number(value))}`, "Contributed"]} />
             </PieChart>
           </ResponsiveContainer>
         </CardContent>
@@ -91,7 +91,7 @@ export function GoalCharts({ goals }: GoalChartsProps) {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
-              <Tooltip formatter={(value) => [`${value}%`, "Progress"]} />
+              <Tooltip formatter={(value: unknown) => [`${value}%`, "Progress"]} />
               <Legend />
               <Line type="monotone" dataKey="progress" stroke="#8884d8" strokeWidth={2} name="Progress %" />
             </LineChart>

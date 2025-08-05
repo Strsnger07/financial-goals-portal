@@ -18,7 +18,7 @@ interface Goal {
   category: string
   progress: number
   contributed: number
-  createdAt: any
+  createdAt: Date | { toDate: () => Date }
   milestoneReached: number[]
 }
 

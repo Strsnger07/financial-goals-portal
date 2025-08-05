@@ -100,10 +100,10 @@ export interface UserProfile {
 // Smart Recommendations Engine
 export class SmartRecommendationsEngine {
   private userProfile: UserProfile
-  private existingGoals: any[]
-  private spendingData: any[]
+  private existingGoals: GoalSuggestion[]
+  private spendingData: SpendingAnalysis[]
 
-  constructor(userProfile: UserProfile, existingGoals: any[] = [], spendingData: any[] = []) {
+  constructor(userProfile: UserProfile, existingGoals: GoalSuggestion[] = [], spendingData: SpendingAnalysis[] = []) {
     this.userProfile = userProfile
     this.existingGoals = existingGoals
     this.spendingData = spendingData
@@ -145,7 +145,7 @@ export class SmartRecommendationsEngine {
   private generateEmergencyFundRecommendation(): GoalSuggestion {
     const monthlyExpenses = this.userProfile.expenses
     const recommendedAmount = monthlyExpenses * 6 // 6 months of expenses
-    const currentEmergencyFund = this.existingGoals.find(g => g.type === 'emergency_fund')?.progress || 0
+    const currentEmergencyFund = this.userProfile.savings // Use user's current savings
     const neededAmount = Math.max(0, recommendedAmount - currentEmergencyFund)
     const currencySymbol = this.getCurrencySymbol()
 
@@ -391,7 +391,7 @@ export class SmartRecommendationsEngine {
     const insights: FinancialInsight[] = []
     const savingsRate = this.getSavingsRate()
     const debtRatio = this.getDebtToIncomeRatio()
-    const emergencyFund = this.existingGoals.find(g => g.type === 'emergency_fund')?.progress || 0
+    const emergencyFund = this.userProfile.savings // Use user's current savings
     const monthlyExpenses = this.userProfile.expenses
 
     // Savings rate insight
