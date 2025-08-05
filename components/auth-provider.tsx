@@ -26,6 +26,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter()
 
   useEffect(() => {
+    if (!auth) {
+      setLoading(false)
+      return
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user)
       setLoading(false)
@@ -36,8 +41,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
-      await signOut(auth)
-      router.push("/auth/login")
+      if (auth) {
+        await signOut(auth)
+        router.push("/auth/login")
+      }
     } catch (error) {
       console.error("Error signing out:", error)
     }

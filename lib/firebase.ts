@@ -1,6 +1,6 @@
-import { initializeApp, getApps } from "firebase/app"
-import { getAuth, GoogleAuthProvider } from "firebase/auth"
-import { getFirestore } from "firebase/firestore"
+import { initializeApp, getApps, type FirebaseApp } from "firebase/app"
+import { getAuth, GoogleAuthProvider, type Auth } from "firebase/auth"
+import { getFirestore, type Firestore } from "firebase/firestore"
 
 // Check if we're in a browser environment
 const isClient = typeof window !== "undefined"
@@ -15,10 +15,10 @@ const firebaseConfig = {
 }
 
 // Initialize Firebase only if we're in a browser environment and it hasn't been initialized already
-let app
-let auth
-let db
-let googleProvider
+let app: FirebaseApp | undefined
+let auth: Auth | undefined
+let db: Firestore | undefined
+let googleProvider: GoogleAuthProvider | undefined
 
 if (isClient) {
   try {

@@ -32,6 +32,9 @@ export default function SignupPage() {
   }
 
   const createUserProfile = async (user: any) => {
+    if (!db) {
+      throw new Error("Firebase not initialized")
+    }
     await setDoc(doc(db, "users", user.uid), {
       name: formData.name || user.displayName,
       email: user.email,
@@ -43,6 +46,7 @@ export default function SignupPage() {
 
   const handleEmailSignup = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true)
 
     if (formData.password !== formData.confirmPassword) {
       toast({
@@ -50,15 +54,16 @@ export default function SignupPage() {
         description: "Passwords do not match",
         variant: "destructive",
       })
+      setLoading(false)
       return
     }
 
-    setLoading(true)
-
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password)
-      await updateProfile(userCredential.user, { displayName: formData.name })
-      await createUserProfile(userCredential.user)
+      if (!auth) {
+        throw new Error("Firebase not initialized")
+      }
+      const result = await createUserWithEmailAndPassword(auth, formData.email, formData.password)
+      await createUserProfile(result.user)
 
       toast({
         title: "Success",
@@ -79,6 +84,9 @@ export default function SignupPage() {
   const handleGoogleSignup = async () => {
     setLoading(true)
     try {
+      if (!auth || !googleProvider) {
+        throw new Error("Firebase not initialized")
+      }
       const result = await signInWithPopup(auth, googleProvider)
       await createUserProfile(result.user)
 

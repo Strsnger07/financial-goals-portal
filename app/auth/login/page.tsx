@@ -25,6 +25,9 @@ export default function LoginPage() {
     setLoading(true)
 
     try {
+      if (!auth) {
+        throw new Error("Firebase not initialized")
+      }
       await signInWithEmailAndPassword(auth, email, password)
       toast({
         title: "Success",
@@ -45,6 +48,9 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     setLoading(true)
     try {
+      if (!auth || !googleProvider) {
+        throw new Error("Firebase not initialized")
+      }
       await signInWithPopup(auth, googleProvider)
       toast({
         title: "Success",
