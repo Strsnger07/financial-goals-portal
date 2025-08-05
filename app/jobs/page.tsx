@@ -72,7 +72,7 @@ export default function JobsPage() {
           <Briefcase className="mx-auto h-12 w-12 text-blue-500 mb-4" />
           <h2 className="text-xl font-semibold mb-2">Job Portal Coming Soon!</h2>
           <p className="text-gray-600 mb-4">
-            The full job portal with application system is being prepared. Here's a preview of available positions:
+            The full job portal with application system is being prepared. Here&apos;s a preview of available positions:
           </p>
         </div>
 

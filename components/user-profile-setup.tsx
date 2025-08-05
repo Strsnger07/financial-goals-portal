@@ -31,7 +31,7 @@ export function UserProfileSetup({ onProfileComplete, initialProfile }: UserProf
   })
   const { currency } = useCurrency()
 
-  const updateProfile = (field: keyof UserProfile, value: any) => {
+  const updateProfile = (field: keyof UserProfile, value: string | number) => {
     setProfile(prev => ({ ...prev, [field]: value }))
   }
 
@@ -234,19 +234,19 @@ export function UserProfileSetup({ onProfileComplete, initialProfile }: UserProf
                 {profile.riskTolerance === 'conservative' && (
                   <p className="text-sm text-blue-800">
                     You prefer stable, low-risk investments with predictable returns. 
-                    We'll suggest goals focused on capital preservation and steady growth.
+                    We&apos;ll suggest goals focused on capital preservation and steady growth.
                   </p>
                 )}
                 {profile.riskTolerance === 'moderate' && (
                   <p className="text-sm text-blue-800">
-                    You're comfortable with some risk for better returns. 
-                    We'll suggest a balanced mix of conservative and growth-oriented goals.
+                    You&apos;re comfortable with some risk for better returns. 
+                    We&apos;ll suggest a balanced mix of conservative and growth-oriented goals.
                   </p>
                 )}
                 {profile.riskTolerance === 'aggressive' && (
                   <p className="text-sm text-blue-800">
-                    You're willing to take higher risks for potentially higher returns. 
-                    We'll suggest growth-focused investment goals and opportunities.
+                    You&apos;re willing to take higher risks for potentially higher returns. 
+                    We&apos;ll suggest growth-focused investment goals and opportunities.
                   </p>
                 )}
               </div>

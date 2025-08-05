@@ -102,7 +102,7 @@ export function ContributeDialog({ goal, open, onOpenChange, onMilestoneReached 
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add Contribution</DialogTitle>
-          <DialogDescription>Add money to your "{goal.name}" goal</DialogDescription>
+          <DialogDescription>Add money to your &quot;{goal.name}&quot; goal</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">

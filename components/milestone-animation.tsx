@@ -42,7 +42,7 @@ export function MilestoneAnimation({ milestone, onComplete }: MilestoneAnimation
       <div className={`bg-gradient-to-r ${info.color} p-8 rounded-lg text-white text-center shadow-2xl animate-bounce`}>
         <div className="text-6xl mb-4 animate-pulse">{info.emoji}</div>
         <h2 className="text-2xl font-bold mb-2">{info.title}</h2>
-        <p className="text-lg">You've reached {milestone}% of your goal!</p>
+        <p className="text-lg">You&apos;ve reached {milestone}% of your goal!</p>
         <div className="flex justify-center mt-4">
           {[...Array(5)].map((_, i) => (
             <Star key={i} className="w-6 h-6 text-yellow-300 mx-1 animate-pulse" fill="currentColor" />

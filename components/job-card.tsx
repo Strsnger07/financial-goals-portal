@@ -18,7 +18,7 @@ interface Job {
   location: string
   type: string
   deadline: string
-  createdAt: any
+  createdAt: Date | { toDate: () => Date }
   createdBy: string
   applicants: string[]
 }

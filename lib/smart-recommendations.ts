@@ -391,7 +391,6 @@ export class SmartRecommendationsEngine {
     const insights: FinancialInsight[] = []
     const savingsRate = this.getSavingsRate()
     const debtRatio = this.getDebtToIncomeRatio()
-    const emergencyFund = this.userProfile.savings // Use user's current savings
     const monthlyExpenses = this.userProfile.expenses
 
     // Savings rate insight
@@ -526,10 +525,10 @@ export class SmartRecommendationsEngine {
 
     return {
       suggestions: suggestions.filter(s => s.suggestedAmount > 0),
-      priorities: priorities.sort((a, b) => b.score - a.score),
+      priorities: priorities.sort((first, second) => second.score - first.score),
       insights,
       nudges,
-      actions: actions.sort((a, b) => a.priority === 'high' ? -1 : 1)
+      actions: actions.sort((first, _second) => first.priority === 'high' ? -1 : 1)
     }
   }
 } 

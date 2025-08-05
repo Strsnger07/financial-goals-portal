@@ -1,10 +1,9 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { 
   SmartRecommendationsEngine, 
@@ -19,26 +18,12 @@ import { GoalTemplates } from "@/components/goal-templates"
 import { useCurrency } from "@/contexts/currency-context"
 import { 
   Target, 
-  TrendingUp, 
   AlertTriangle, 
   CheckCircle, 
   Lightbulb, 
   Clock,
-  DollarSign,
-  Shield,
-  CreditCard,
-  Home,
-  GraduationCap,
-  Car,
-  Heart,
-  Briefcase,
-  Stethoscope,
-  ScrollText,
   Plus,
-  ArrowRight,
-  Star,
   Zap,
-  BookOpen,
   BarChart3,
   CheckSquare
 } from "lucide-react"
@@ -153,7 +138,7 @@ export function SmartRecommendations({ userProfile, existingGoals, onGoalCreate 
       )}
 
       {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)}>
+      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'suggestions' | 'insights' | 'actions' | 'templates')}>
         <TabsList className="grid w-full grid-cols-4 bg-gray-800">
           <TabsTrigger value="suggestions" className="data-[state=active]:bg-blue-600">Suggestions</TabsTrigger>
           <TabsTrigger value="insights" className="data-[state=active]:bg-blue-600">Insights</TabsTrigger>
@@ -290,7 +275,7 @@ export function SmartRecommendations({ userProfile, existingGoals, onGoalCreate 
             const suggestion: GoalSuggestion = {
               id: `template-${Date.now()}`,
               name: goal.name,
-              type: 'savings' as any,
+              type: 'savings' as 'emergency_fund' | 'debt_payoff' | 'investment' | 'savings' | 'retirement' | 'education' | 'home' | 'vehicle' | 'vacation' | 'wedding',
               priority: 'medium',
               suggestedAmount: goal.targetAmount,
               reasoning: `Template goal: ${goal.name}`,
