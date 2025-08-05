@@ -13,7 +13,7 @@ import { db } from "@/lib/firebase"
 import { Button } from "@/components/ui/button"
 import { Plus, Brain, Target } from "lucide-react"
 import { UserProfile, GoalSuggestion } from "@/lib/smart-recommendations"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface Goal {
@@ -24,7 +24,7 @@ interface Goal {
   category: string
   progress: number
   contributed: number
-  createdAt: any
+  createdAt: Date | { toDate: () => Date }
   milestoneReached: number[]
 }
 
@@ -41,6 +41,7 @@ export default function DashboardPage() {
 
     // Load user profile
     const loadUserProfile = async () => {
+      if (!db) return
       const profileDoc = doc(db, "userProfiles", user.uid)
       try {
         const profileSnapshot = await getDoc(profileDoc)
@@ -52,6 +53,7 @@ export default function DashboardPage() {
       }
     }
 
+    if (!db) return
     const q = query(collection(db, "goals"), where("userId", "==", user.uid))
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -62,8 +64,12 @@ export default function DashboardPage() {
 
       setGoals(
         goalsData.sort((a, b) => {
-          const aDate = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt)
-          const bDate = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt)
+          const aDate = typeof a.createdAt === 'object' && 'toDate' in a.createdAt 
+            ? a.createdAt.toDate() 
+            : new Date(a.createdAt)
+          const bDate = typeof b.createdAt === 'object' && 'toDate' in b.createdAt 
+            ? b.createdAt.toDate() 
+            : new Date(b.createdAt)
           return bDate.getTime() - aDate.getTime()
         }),
       )
@@ -75,7 +81,7 @@ export default function DashboardPage() {
   }, [user])
 
   const handleSmartGoalCreate = async (suggestion: GoalSuggestion) => {
-    if (!user) return
+    if (!user || !db) return
 
     const newGoal = {
       name: suggestion.name,

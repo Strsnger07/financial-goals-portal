@@ -14,7 +14,7 @@ import { db } from "@/lib/firebase"
 import { Button } from "@/components/ui/button"
 import { Plus, Target, Brain, User, Settings } from "lucide-react"
 import { UserProfile, GoalSuggestion } from "@/lib/smart-recommendations"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface Goal {
@@ -25,7 +25,7 @@ interface Goal {
   category: string
   progress: number
   contributed: number
-  createdAt: any
+  createdAt: Date | { toDate: () => Date }
   milestoneReached: number[]
 }
 
@@ -43,6 +43,7 @@ export default function GoalsPage() {
 
     // Load user profile
     const loadUserProfile = async () => {
+      if (!db) return
       const profileDoc = doc(db, "userProfiles", user.uid)
       try {
         const profileSnapshot = await getDoc(profileDoc)
@@ -58,6 +59,7 @@ export default function GoalsPage() {
     }
 
     // Load goals
+    if (!db) return
     const q = query(collection(db, "goals"), where("userId", "==", user.uid))
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const goalsData = snapshot.docs.map((doc) => ({
@@ -67,8 +69,12 @@ export default function GoalsPage() {
 
       setGoals(
         goalsData.sort((a, b) => {
-          const aDate = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt)
-          const bDate = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt)
+          const aDate = typeof a.createdAt === 'object' && 'toDate' in a.createdAt 
+            ? a.createdAt.toDate() 
+            : new Date(a.createdAt)
+          const bDate = typeof b.createdAt === 'object' && 'toDate' in b.createdAt 
+            ? b.createdAt.toDate() 
+            : new Date(b.createdAt)
           return bDate.getTime() - aDate.getTime()
         }),
       )
@@ -80,7 +86,7 @@ export default function GoalsPage() {
   }, [user])
 
   const handleProfileComplete = async (profile: UserProfile) => {
-    if (!user) return
+    if (!user || !db) return
 
     try {
       await setDoc(doc(db, "userProfiles", user.uid), profile)
@@ -92,7 +98,7 @@ export default function GoalsPage() {
   }
 
   const handleSmartGoalCreate = async (suggestion: GoalSuggestion) => {
-    if (!user) return
+    if (!user || !db) return
 
     const newGoal = {
       name: suggestion.name,

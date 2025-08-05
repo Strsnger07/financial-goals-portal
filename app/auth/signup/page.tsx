@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState } from "react"
-import { createUserWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth"
+import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth"
 import { doc, setDoc } from "firebase/firestore"
 import { auth, googleProvider, db } from "@/lib/firebase"
 import { Button } from "@/components/ui/button"
@@ -31,7 +31,7 @@ export default function SignupPage() {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
-  const createUserProfile = async (user: any) => {
+  const createUserProfile = async (user: { uid: string; email: string | null; displayName: string | null }) => {
     if (!db) {
       throw new Error("Firebase not initialized")
     }
@@ -70,10 +70,11 @@ export default function SignupPage() {
         description: "Account created successfully!",
       })
       router.push("/dashboard")
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "An error occurred"
       toast({
         title: "Error",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       })
     } finally {
@@ -95,10 +96,11 @@ export default function SignupPage() {
         description: "Account created with Google successfully!",
       })
       router.push("/dashboard")
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "An error occurred"
       toast({
         title: "Error",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive",
       })
     } finally {
