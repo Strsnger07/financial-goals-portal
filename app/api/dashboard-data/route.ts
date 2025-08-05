@@ -1,53 +1,37 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { initializeApp } from "firebase/app"
-import { getAuth } from "firebase/auth"
-import { getFirestore, collection, getDocs, query, where } from "firebase/firestore"
 
-// Initialize Firebase
-const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-}
-
-const app = initializeApp(firebaseConfig)
-const auth = getAuth(app)
-const db = getFirestore(app)
-
-async function verifyToken(request: NextRequest) {
-  const token = request.headers.get("Authorization")?.replace("Bearer ", "")
-  if (!token) throw new Error("No token provided")
-
-  // For now, we'll use a simple token verification
-  // In production, you should verify the Firebase ID token properly
-  return { uid: "user-id" }
-}
+// For now, we'll create a simple API that works without Firebase server-side
+// In production, you should use Firebase Admin SDK with proper service account
 
 export async function GET(request: NextRequest) {
   try {
-    const decodedToken = await verifyToken(request)
+    // For now, return mock dashboard data
+    // In production, implement proper Firebase Admin SDK
+    const mockGoals = [
+      {
+        id: "demo-1",
+        name: "Emergency Fund",
+        category: "Savings",
+        targetAmount: 50000,
+        contributed: 25000,
+        progress: 50,
+      },
+      {
+        id: "demo-2", 
+        name: "Vacation Fund",
+        category: "Travel",
+        targetAmount: 30000,
+        contributed: 15000,
+        progress: 50,
+      }
+    ]
 
-    // Get user's goals
-    const goalsRef = collection(db, "goals")
-    const q = query(goalsRef, where("userId", "==", decodedToken.uid))
-    const goalsSnapshot = await getDocs(q)
+    const totalGoals = mockGoals.length
+    const completedGoals = mockGoals.filter((goal) => goal.progress >= 100).length
+    const totalContributed = mockGoals.reduce((sum, goal) => sum + goal.contributed, 0)
+    const totalTarget = mockGoals.reduce((sum, goal) => sum + goal.targetAmount, 0)
 
-    const goals = goalsSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }))
-
-    // Calculate dashboard metrics
-    const totalGoals = goals.length
-    const completedGoals = goals.filter((goal) => goal.progress >= 100).length
-    const totalContributed = goals.reduce((sum, goal) => sum + goal.contributed, 0)
-    const totalTarget = goals.reduce((sum, goal) => sum + goal.targetAmount, 0)
-
-    // Prepare chart data
-    const pieChartData = goals
+    const pieChartData = mockGoals
       .map((goal) => ({
         name: goal.name,
         value: goal.contributed,
@@ -55,7 +39,7 @@ export async function GET(request: NextRequest) {
       }))
       .filter((item) => item.value > 0)
 
-    const progressData = goals.map((goal) => ({
+    const progressData = mockGoals.map((goal) => ({
       name: goal.name,
       progress: goal.progress,
       contributed: goal.contributed,
@@ -76,6 +60,6 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
