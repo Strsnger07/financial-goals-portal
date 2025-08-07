@@ -116,6 +116,10 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background-color: #F3E2D4;
+  }
+  .dark body {
+    background: linear-gradient(to bottom right, #415E72, #B9375D, #D25D5D);
   }
 }
