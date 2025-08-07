@@ -19,8 +19,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.className} bg-[#F3E2D4] dark:bg-gradient-to-br dark:from-[#415E72] dark:via-[#B9375D] dark:to-[#D25D5D] text-[#415E72] dark:text-white min-h-screen`}>
+    <html lang="en" className="dark" style={{ backgroundColor: '#F3E2D4' }}>
+      <body className={`${inter.className} bg-[#F3E2D4] dark:bg-gradient-to-br dark:from-[#415E72] dark:via-[#B9375D] dark:to-[#D25D5D] text-[#415E72] dark:text-white min-h-screen`} style={{ backgroundColor: '#F3E2D4' }}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

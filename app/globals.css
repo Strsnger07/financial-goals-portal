@@ -117,9 +117,15 @@
   }
   body {
     @apply text-foreground;
-    background-color: #F3E2D4;
+    background-color: #F3E2D4 !important;
   }
   .dark body {
-    background: linear-gradient(to bottom right, #415E72, #B9375D, #D25D5D);
+    background: linear-gradient(to bottom right, #415E72, #B9375D, #D25D5D) !important;
+  }
+  html body {
+    background-color: #F3E2D4 !important;
+  }
+  .dark html body {
+    background: linear-gradient(to bottom right, #415E72, #B9375D, #D25D5D) !important;
   }
 }
