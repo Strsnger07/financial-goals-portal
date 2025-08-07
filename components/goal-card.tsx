@@ -79,10 +79,10 @@ export function GoalCard({ goal, onGoalDeleted }: GoalCardProps) {
 
   return (
     <>
-      <Card className="hover:shadow-xl transition-all duration-300 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm border-slate-200/50 dark:border-slate-700/50 shadow-lg hover:scale-105">
+      <Card className="hover:shadow-xl transition-all duration-300 bg-[#FBF3D5]/90 dark:bg-[#9CAFAA]/90 backdrop-blur-sm border-[#D6DAC8]/50 shadow-lg hover:scale-105">
         <CardHeader>
           <div className="flex justify-between items-start">
-            <CardTitle className="text-lg text-slate-900 dark:text-slate-100">{goal.name}</CardTitle>
+            <CardTitle className="text-lg text-[#9CAFAA]">{goal.name}</CardTitle>
             <div className="flex items-center space-x-2">
               {getStatusBadge()}
               <AlertDialog>
@@ -95,24 +95,24 @@ export function GoalCard({ goal, onGoalDeleted }: GoalCardProps) {
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </AlertDialogTrigger>
-                <AlertDialogContent className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm border-slate-200/50 dark:border-slate-700/50">
+                <AlertDialogContent className="bg-[#FBF3D5]/95 dark:bg-[#9CAFAA]/95 backdrop-blur-sm border-[#D6DAC8]/50">
                   <AlertDialogHeader>
-                    <AlertDialogTitle className="text-slate-900 dark:text-slate-100 flex items-center">
+                    <AlertDialogTitle className="text-[#9CAFAA] flex items-center">
                       <AlertTriangle className="h-5 w-5 text-red-400 mr-2" />
                       Delete Goal
                     </AlertDialogTitle>
-                    <AlertDialogDescription className="text-slate-600 dark:text-slate-400">
+                    <AlertDialogDescription className="text-[#D6DAC8]">
                       Are you sure you want to delete "{goal.name}"? This action cannot be undone and all progress will be lost.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel className="bg-slate-100 dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600">
+                    <AlertDialogCancel className="bg-[#D6DAC8] border-[#D6DAC8] text-[#9CAFAA] hover:bg-[#D6DAC8]/80">
                       Cancel
                     </AlertDialogCancel>
                     <AlertDialogAction
                       onClick={handleDeleteGoal}
                       disabled={isDeleting}
-                      className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white shadow-lg"
+                      className="bg-[#D6A99D] hover:bg-[#D6A99D]/90 text-white shadow-lg"
                     >
                       {isDeleting ? "Deleting..." : "Delete Goal"}
                     </AlertDialogAction>
@@ -121,7 +121,7 @@ export function GoalCard({ goal, onGoalDeleted }: GoalCardProps) {
               </AlertDialog>
             </div>
           </div>
-          <div className="flex items-center text-sm text-slate-500 dark:text-slate-400">
+          <div className="flex items-center text-sm text-[#D6DAC8]">
             <Calendar className="mr-1 h-4 w-4" />
             {new Date(goal.deadline).toLocaleDateString()}
             {daysLeft >= 0 && <span className="ml-2">({daysLeft} days left)</span>}
@@ -129,32 +129,32 @@ export function GoalCard({ goal, onGoalDeleted }: GoalCardProps) {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <div className="flex justify-between text-sm text-slate-600 dark:text-slate-300">
+            <div className="flex justify-between text-sm text-[#9CAFAA]">
               <span>Progress</span>
               <span>{progressPercentage.toFixed(1)}%</span>
             </div>
-            <Progress value={progressPercentage} className="h-2 bg-slate-200 dark:bg-slate-700" />
+            <Progress value={progressPercentage} className="h-2 bg-[#D6DAC8]" />
           </div>
 
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <p className="text-slate-500 dark:text-slate-400">Contributed</p>
-              <p className="font-semibold text-slate-900 dark:text-slate-100">{formatCurrency(goal.contributed)}</p>
+              <p className="text-[#D6DAC8]">Contributed</p>
+              <p className="font-semibold text-[#9CAFAA]">{formatCurrency(goal.contributed)}</p>
             </div>
             <div>
-              <p className="text-slate-500 dark:text-slate-400">Target</p>
-              <p className="font-semibold text-slate-900 dark:text-slate-100">{formatCurrency(goal.targetAmount)}</p>
+              <p className="text-[#D6DAC8]">Target</p>
+              <p className="font-semibold text-[#9CAFAA]">{formatCurrency(goal.targetAmount)}</p>
             </div>
           </div>
 
           <div className="text-sm">
-            <p className="text-slate-500 dark:text-slate-400">Remaining</p>
-            <p className="font-semibold text-rose-600 dark:text-rose-400">{formatCurrency(remainingAmount)}</p>
+            <p className="text-[#D6DAC8]">Remaining</p>
+            <p className="font-semibold text-[#D6A99D]">{formatCurrency(remainingAmount)}</p>
           </div>
 
           <div className="flex items-center justify-between">
-            <Badge variant="outline" className="border-slate-300 text-slate-700 dark:border-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-700/20">{goal.category}</Badge>
-            <Button size="sm" onClick={() => setShowContributeDialog(true)} disabled={progressPercentage >= 100} className="bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white shadow-lg">
+            <Badge variant="outline" className="border-[#D6DAC8] text-[#9CAFAA] bg-[#D6DAC8]/20">{goal.category}</Badge>
+            <Button size="sm" onClick={() => setShowContributeDialog(true)} disabled={progressPercentage >= 100} className="bg-[#D6A99D] hover:bg-[#D6A99D]/90 text-white shadow-lg">
               <Plus className="mr-1 h-4 w-4" />
               Add Funds
             </Button>
@@ -167,10 +167,10 @@ export function GoalCard({ goal, onGoalDeleted }: GoalCardProps) {
                 key={milestone}
                 className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
                   goal.milestoneReached?.includes(milestone)
-                    ? "bg-gradient-to-r from-rose-500 to-amber-500 text-white shadow-lg"
+                    ? "bg-[#D6A99D] text-white shadow-lg"
                     : progressPercentage >= milestone
-                      ? "bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-lg"
-                      : "bg-slate-200 dark:bg-slate-700 text-slate-400"
+                      ? "bg-[#D6DAC8] text-[#9CAFAA] shadow-lg"
+                      : "bg-[#D6DAC8]/50 text-[#9CAFAA]/50"
                 }`}
               >
                 {milestone === 25 ? "🥉" : milestone === 50 ? "🥈" : "🥇"}

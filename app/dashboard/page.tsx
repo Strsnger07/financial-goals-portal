@@ -141,15 +141,15 @@ export default function DashboardPage() {
       <DashboardLayout>
         <div className="space-y-6 text-gray-100">
           <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-rose-500 to-amber-500 bg-clip-text text-transparent">Financial Dashboard</h1>
+            <h1 className="text-3xl font-bold text-[#D6A99D]">Financial Dashboard</h1>
             <div className="flex space-x-2">
-              <Button variant="outline" asChild className="border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700/20">
+              <Button variant="outline" asChild className="border-[#D6DAC8] text-[#9CAFAA] hover:bg-[#D6DAC8]/20">
                 <Link href="/goals">
                   <Target className="mr-2 h-4 w-4" />
                   Manage Goals
                 </Link>
               </Button>
-              <Button onClick={() => setShowCreateDialog(true)} className="bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white shadow-lg">
+              <Button onClick={() => setShowCreateDialog(true)} className="bg-[#D6A99D] hover:bg-[#D6A99D]/90 text-white shadow-lg">
                 <Plus className="mr-2 h-4 w-4" />
                 Create Goal
               </Button>
@@ -157,19 +157,19 @@ export default function DashboardPage() {
           </div>
 
           <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'overview' | 'smart')}>
-            <TabsList className="grid w-full grid-cols-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
-              <TabsTrigger value="overview" className="flex items-center space-x-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-rose-500 data-[state=active]:to-amber-500 data-[state=active]:text-white">
+            <TabsList className="grid w-full grid-cols-2 bg-[#FBF3D5]/80 dark:bg-[#9CAFAA]/80 backdrop-blur-sm border border-[#D6DAC8]/50">
+              <TabsTrigger value="overview" className="flex items-center space-x-2 data-[state=active]:bg-[#D6A99D] data-[state=active]:text-white">
                 <TrendingUp className="h-4 w-4" />
                 <span>Overview</span>
-                <span className="bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200 text-xs px-2 py-1 rounded-full">
+                <span className="bg-[#D6DAC8] text-[#9CAFAA] text-xs px-2 py-1 rounded-full">
                   {totalGoals}
                 </span>
               </TabsTrigger>
-              <TabsTrigger value="smart" className="flex items-center space-x-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-rose-500 data-[state=active]:to-amber-500 data-[state=active]:text-white">
+              <TabsTrigger value="smart" className="flex items-center space-x-2 data-[state=active]:bg-[#D6A99D] data-[state=active]:text-white">
                 <Brain className="h-4 w-4" />
                 <span>Smart Insights</span>
                 {userProfile && (
-                  <span className="bg-gradient-to-r from-slate-100 to-slate-200 text-slate-800 dark:from-slate-700 dark:to-slate-600 dark:text-slate-200 text-xs px-2 py-1 rounded-full">
+                  <span className="bg-[#D6DAC8] text-[#9CAFAA] text-xs px-2 py-1 rounded-full">
                     AI
                   </span>
                 )}
@@ -179,47 +179,47 @@ export default function DashboardPage() {
             <TabsContent value="overview" className="space-y-6">
               {/* Summary Cards */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200/50 dark:border-slate-700/50 shadow-lg hover:shadow-xl transition-shadow">
+                <Card className="bg-[#FBF3D5]/80 dark:bg-[#9CAFAA]/80 backdrop-blur-sm border-[#D6DAC8]/50 shadow-lg hover:shadow-xl transition-shadow">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-300">Total Goals</CardTitle>
-                    <Target className="h-4 w-4 text-rose-500" />
+                    <CardTitle className="text-sm font-medium text-[#9CAFAA]">Total Goals</CardTitle>
+                    <Target className="h-4 w-4 text-[#D6A99D]" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{totalGoals}</div>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">Active financial goals</p>
+                    <div className="text-2xl font-bold text-[#9CAFAA]">{totalGoals}</div>
+                    <p className="text-xs text-[#D6DAC8]">Active financial goals</p>
                   </CardContent>
                 </Card>
 
-                <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200/50 dark:border-slate-700/50 shadow-lg hover:shadow-xl transition-shadow">
+                <Card className="bg-[#FBF3D5]/80 dark:bg-[#9CAFAA]/80 backdrop-blur-sm border-[#D6DAC8]/50 shadow-lg hover:shadow-xl transition-shadow">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-300">Total Target</CardTitle>
-                    <DollarSign className="h-4 w-4 text-amber-500" />
+                    <CardTitle className="text-sm font-medium text-[#9CAFAA]">Total Target</CardTitle>
+                    <DollarSign className="h-4 w-4 text-[#D6A99D]" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{formatCurrency(totalTargetAmount)}</div>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">Combined target amount</p>
+                    <div className="text-2xl font-bold text-[#9CAFAA]">{formatCurrency(totalTargetAmount)}</div>
+                    <p className="text-xs text-[#D6DAC8]">Combined target amount</p>
                   </CardContent>
                 </Card>
 
-                <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200/50 dark:border-slate-700/50 shadow-lg hover:shadow-xl transition-shadow">
+                <Card className="bg-[#FBF3D5]/80 dark:bg-[#9CAFAA]/80 backdrop-blur-sm border-[#D6DAC8]/50 shadow-lg hover:shadow-xl transition-shadow">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-300">Total Saved</CardTitle>
-                    <TrendingUp className="h-4 w-4 text-slate-500" />
+                    <CardTitle className="text-sm font-medium text-[#9CAFAA]">Total Saved</CardTitle>
+                    <TrendingUp className="h-4 w-4 text-[#D6A99D]" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{formatCurrency(totalContributed)}</div>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">Total contributions</p>
+                    <div className="text-2xl font-bold text-[#9CAFAA]">{formatCurrency(totalContributed)}</div>
+                    <p className="text-xs text-[#D6DAC8]">Total contributions</p>
                   </CardContent>
                 </Card>
 
-                <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200/50 dark:border-slate-700/50 shadow-lg hover:shadow-xl transition-shadow">
+                <Card className="bg-[#FBF3D5]/80 dark:bg-[#9CAFAA]/80 backdrop-blur-sm border-[#D6DAC8]/50 shadow-lg hover:shadow-xl transition-shadow">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-300">Progress</CardTitle>
-                    <div className="h-4 w-4 rounded-full bg-gradient-to-r from-rose-500 to-amber-500" />
+                    <CardTitle className="text-sm font-medium text-[#9CAFAA]">Progress</CardTitle>
+                    <div className="h-4 w-4 rounded-full bg-[#D6A99D]" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{overallProgress.toFixed(1)}%</div>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">Overall completion</p>
+                    <div className="text-2xl font-bold text-[#9CAFAA]">{overallProgress.toFixed(1)}%</div>
+                    <p className="text-xs text-[#D6DAC8]">Overall completion</p>
                   </CardContent>
                 </Card>
               </div>
@@ -230,22 +230,22 @@ export default function DashboardPage() {
               {/* Quick Actions and Recent Goals */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Quick Actions */}
-                <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200/50 dark:border-slate-700/50 shadow-lg">
+                <Card className="bg-[#FBF3D5]/80 dark:bg-[#9CAFAA]/80 backdrop-blur-sm border-[#D6DAC8]/50 shadow-lg">
                   <CardHeader>
-                    <CardTitle className="text-slate-900 dark:text-slate-100">Quick Actions</CardTitle>
+                    <CardTitle className="text-[#9CAFAA]">Quick Actions</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    <Button onClick={() => setShowCreateDialog(true)} className="w-full bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white shadow-lg">
+                    <Button onClick={() => setShowCreateDialog(true)} className="w-full bg-[#D6A99D] hover:bg-[#D6A99D]/90 text-white shadow-lg">
                       <Plus className="mr-2 h-4 w-4" />
                       Create New Goal
                     </Button>
-                    <Button variant="outline" asChild className="w-full border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700/20">
+                    <Button variant="outline" asChild className="w-full border-[#D6DAC8] text-[#9CAFAA] hover:bg-[#D6DAC8]/20">
                       <Link href="/goals">
                         <Target className="mr-2 h-4 w-4" />
                         Manage All Goals
                       </Link>
                     </Button>
-                    <Button variant="outline" asChild className="w-full border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700/20">
+                    <Button variant="outline" asChild className="w-full border-[#D6DAC8] text-[#9CAFAA] hover:bg-[#D6DAC8]/20">
                       <Link href="/profile">
                         <Brain className="mr-2 h-4 w-4" />
                         Update Profile
@@ -255,9 +255,9 @@ export default function DashboardPage() {
                 </Card>
 
                 {/* Upcoming Deadlines */}
-                <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200/50 dark:border-slate-700/50 shadow-lg">
+                <Card className="bg-[#FBF3D5]/80 dark:bg-[#9CAFAA]/80 backdrop-blur-sm border-[#D6DAC8]/50 shadow-lg">
                   <CardHeader>
-                    <CardTitle className="text-slate-900 dark:text-slate-100 flex items-center">
+                    <CardTitle className="text-[#9CAFAA] flex items-center">
                       <Calendar className="mr-2 h-4 w-4" />
                       Upcoming Deadlines
                     </CardTitle>
@@ -268,19 +268,19 @@ export default function DashboardPage() {
                         {upcomingDeadlines.slice(0, 3).map((goal) => {
                           const daysLeft = Math.ceil((new Date(goal.deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
                           return (
-                            <div key={goal.id} className="flex items-center justify-between p-3 bg-gradient-to-r from-rose-50 to-amber-50 dark:from-slate-700 dark:to-slate-800 rounded-lg border border-slate-200/50 dark:border-slate-600/50">
+                            <div key={goal.id} className="flex items-center justify-between p-3 bg-[#D6DAC8]/30 rounded-lg border border-[#D6DAC8]/50">
                               <div>
-                                <p className="text-sm font-medium text-slate-900 dark:text-slate-100">{goal.name}</p>
-                                <p className="text-xs text-slate-500 dark:text-slate-400">{new Date(goal.deadline).toLocaleDateString()}</p>
+                                <p className="text-sm font-medium text-[#9CAFAA]">{goal.name}</p>
+                                <p className="text-xs text-[#D6DAC8]">{new Date(goal.deadline).toLocaleDateString()}</p>
                               </div>
-                              <Badge variant={daysLeft <= 7 ? "destructive" : "secondary"} className="bg-gradient-to-r from-rose-500 to-amber-500 text-white">
+                              <Badge variant={daysLeft <= 7 ? "destructive" : "secondary"} className="bg-[#D6A99D] text-white">
                                 {daysLeft} days
                               </Badge>
                             </div>
                           )
                         })}
                         {upcomingDeadlines.length > 3 && (
-                          <Button variant="outline" asChild className="w-full mt-2 border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700/20">
+                          <Button variant="outline" asChild className="w-full mt-2 border-[#D6DAC8] text-[#9CAFAA] hover:bg-[#D6DAC8]/20">
                             <Link href="/goals">
                               View All ({upcomingDeadlines.length})
                             </Link>
@@ -288,7 +288,7 @@ export default function DashboardPage() {
                         )}
                       </div>
                     ) : (
-                      <p className="text-slate-500 dark:text-slate-400 text-sm">No upcoming deadlines</p>
+                      <p className="text-[#D6DAC8] text-sm">No upcoming deadlines</p>
                     )}
                   </CardContent>
                 </Card>
@@ -303,14 +303,14 @@ export default function DashboardPage() {
                   onGoalCreate={handleSmartGoalCreate}
                 />
               ) : (
-                <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200/50 dark:border-slate-700/50 shadow-lg">
+                <Card className="bg-[#FBF3D5]/80 dark:bg-[#9CAFAA]/80 backdrop-blur-sm border-[#D6DAC8]/50 shadow-lg">
                   <CardContent className="text-center py-12">
-                    <Brain className="mx-auto h-12 w-12 text-slate-400 mb-4" />
-                    <h3 className="text-lg font-semibold mb-2 text-slate-900 dark:text-slate-100">Smart Recommendations</h3>
-                    <p className="text-slate-500 dark:text-slate-400 mb-6">
+                    <Brain className="mx-auto h-12 w-12 text-[#D6DAC8] mb-4" />
+                    <h3 className="text-lg font-semibold mb-2 text-[#9CAFAA]">Smart Recommendations</h3>
+                    <p className="text-[#D6DAC8] mb-6">
                       Complete your profile to get personalized AI-powered goal suggestions
                     </p>
-                    <Button onClick={() => window.location.href = '/goals'} className="bg-gradient-to-r from-slate-500 to-slate-600 hover:from-slate-600 hover:to-slate-700 text-white shadow-lg">
+                    <Button onClick={() => window.location.href = '/goals'} className="bg-[#D6A99D] hover:bg-[#D6A99D]/90 text-white shadow-lg">
                       <Brain className="mr-2 h-4 w-4" />
                       Setup Profile
                     </Button>
