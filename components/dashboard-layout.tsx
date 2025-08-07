@@ -45,11 +45,11 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#FBF3D5] dark:bg-[#9CAFAA]">
+    <div className="min-h-screen bg-gradient-to-br from-[#FBF3D5] via-[#C5B0CD] to-[#415E72] dark:bg-gradient-to-br dark:from-[#415E72] dark:via-[#B9375D] dark:to-[#D25D5D]">
       {/* Mobile sidebar */}
       <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
         <div className="fixed inset-0 bg-black/50" onClick={() => setSidebarOpen(false)} />
-        <div className="fixed left-0 top-0 h-full w-64 bg-[#D6A99D] shadow-xl">
+        <div className="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-[#B9375D] to-[#D25D5D] shadow-xl">
           <div className="flex h-16 items-center justify-between px-6">
             <h1 className="text-xl font-bold text-white">Financial Goals</h1>
             <Button
@@ -89,7 +89,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
       {/* Desktop sidebar */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-[#D6A99D] px-6 pb-4 shadow-xl">
+        <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gradient-to-b from-[#B9375D] to-[#D25D5D] px-6 pb-4 shadow-xl">
           <div className="flex h-16 shrink-0 items-center">
             <h1 className="text-xl font-bold text-white">Financial Goals</h1>
           </div>
@@ -125,11 +125,11 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       {/* Main content */}
       <div className="lg:pl-64">
         {/* Top bar */}
-        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-[#D6DAC8]/20 bg-[#FBF3D5]/80 dark:bg-[#9CAFAA]/80 backdrop-blur-sm px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-[#C5B0CD]/20 bg-[#FBF3D5]/80 dark:bg-[#415E72]/80 backdrop-blur-sm px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
           <Button
             type="button"
             variant="ghost"
-            className="-m-2.5 p-2.5 text-slate-700 dark:text-slate-300 lg:hidden"
+            className="-m-2.5 p-2.5 text-[#415E72] dark:text-white lg:hidden"
             onClick={() => setSidebarOpen(true)}
           >
             <span className="sr-only">Open sidebar</span>
@@ -144,7 +144,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Avatar className="h-8 w-8">
                       <AvatarImage src={user?.photoURL || ""} alt={user?.displayName || ""} />
-                      <AvatarFallback className="bg-[#D6A99D] text-white">
+                      <AvatarFallback className="bg-gradient-to-r from-[#B9375D] to-[#D25D5D] text-white">
                         {user?.displayName?.charAt(0) || user?.email?.charAt(0) || "U"}
                       </AvatarFallback>
                     </Avatar>
