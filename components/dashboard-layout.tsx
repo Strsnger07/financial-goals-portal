@@ -45,11 +45,11 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-blue-950 dark:to-indigo-950">
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-amber-50 to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-700">
       {/* Mobile sidebar */}
       <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
         <div className="fixed inset-0 bg-black/50" onClick={() => setSidebarOpen(false)} />
-        <div className="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-emerald-600 to-teal-700 dark:from-emerald-800 dark:to-teal-900 shadow-xl">
+        <div className="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-rose-400 to-amber-300 dark:from-rose-600 dark:to-amber-500 shadow-xl">
           <div className="flex h-16 items-center justify-between px-6">
             <h1 className="text-xl font-bold text-white">Financial Goals</h1>
             <Button
@@ -89,7 +89,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
       {/* Desktop sidebar */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gradient-to-b from-emerald-600 to-teal-700 dark:from-emerald-800 dark:to-teal-900 px-6 pb-4 shadow-xl">
+        <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gradient-to-b from-rose-400 to-amber-300 dark:from-rose-600 dark:to-amber-500 px-6 pb-4 shadow-xl">
           <div className="flex h-16 shrink-0 items-center">
             <h1 className="text-xl font-bold text-white">Financial Goals</h1>
           </div>
@@ -125,7 +125,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       {/* Main content */}
       <div className="lg:pl-64">
         {/* Top bar */}
-        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-slate-200/20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-slate-200/20 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
           <Button
             type="button"
             variant="ghost"
@@ -144,7 +144,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Avatar className="h-8 w-8">
                       <AvatarImage src={user?.photoURL || ""} alt={user?.displayName || ""} />
-                      <AvatarFallback className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white">
+                      <AvatarFallback className="bg-gradient-to-r from-rose-400 to-amber-300 text-white">
                         {user?.displayName?.charAt(0) || user?.email?.charAt(0) || "U"}
                       </AvatarFallback>
                     </Avatar>

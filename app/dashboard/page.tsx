@@ -141,15 +141,15 @@ export default function DashboardPage() {
       <DashboardLayout>
         <div className="space-y-6 text-gray-100">
           <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Financial Dashboard</h1>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-rose-500 to-amber-500 bg-clip-text text-transparent">Financial Dashboard</h1>
             <div className="flex space-x-2">
-              <Button variant="outline" asChild className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-700 dark:text-emerald-300 dark:hover:bg-emerald-900/20">
+              <Button variant="outline" asChild className="border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700/20">
                 <Link href="/goals">
                   <Target className="mr-2 h-4 w-4" />
                   Manage Goals
                 </Link>
               </Button>
-              <Button onClick={() => setShowCreateDialog(true)} className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg">
+              <Button onClick={() => setShowCreateDialog(true)} className="bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white shadow-lg">
                 <Plus className="mr-2 h-4 w-4" />
                 Create Goal
               </Button>
@@ -158,18 +158,18 @@ export default function DashboardPage() {
 
           <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'overview' | 'smart')}>
             <TabsList className="grid w-full grid-cols-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
-              <TabsTrigger value="overview" className="flex items-center space-x-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-teal-500 data-[state=active]:text-white">
+              <TabsTrigger value="overview" className="flex items-center space-x-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-rose-500 data-[state=active]:to-amber-500 data-[state=active]:text-white">
                 <TrendingUp className="h-4 w-4" />
                 <span>Overview</span>
-                <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200 text-xs px-2 py-1 rounded-full">
+                <span className="bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200 text-xs px-2 py-1 rounded-full">
                   {totalGoals}
                 </span>
               </TabsTrigger>
-              <TabsTrigger value="smart" className="flex items-center space-x-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-teal-500 data-[state=active]:text-white">
+              <TabsTrigger value="smart" className="flex items-center space-x-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-rose-500 data-[state=active]:to-amber-500 data-[state=active]:text-white">
                 <Brain className="h-4 w-4" />
                 <span>Smart Insights</span>
                 {userProfile && (
-                  <span className="bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 dark:from-purple-900 dark:to-pink-900 dark:text-purple-200 text-xs px-2 py-1 rounded-full">
+                  <span className="bg-gradient-to-r from-slate-100 to-slate-200 text-slate-800 dark:from-slate-700 dark:to-slate-600 dark:text-slate-200 text-xs px-2 py-1 rounded-full">
                     AI
                   </span>
                 )}
@@ -182,7 +182,7 @@ export default function DashboardPage() {
                 <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200/50 dark:border-slate-700/50 shadow-lg hover:shadow-xl transition-shadow">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-300">Total Goals</CardTitle>
-                    <Target className="h-4 w-4 text-emerald-500" />
+                    <Target className="h-4 w-4 text-rose-500" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{totalGoals}</div>
@@ -193,7 +193,7 @@ export default function DashboardPage() {
                 <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200/50 dark:border-slate-700/50 shadow-lg hover:shadow-xl transition-shadow">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-300">Total Target</CardTitle>
-                    <DollarSign className="h-4 w-4 text-teal-500" />
+                    <DollarSign className="h-4 w-4 text-amber-500" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{formatCurrency(totalTargetAmount)}</div>
@@ -204,7 +204,7 @@ export default function DashboardPage() {
                 <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200/50 dark:border-slate-700/50 shadow-lg hover:shadow-xl transition-shadow">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-300">Total Saved</CardTitle>
-                    <TrendingUp className="h-4 w-4 text-emerald-500" />
+                    <TrendingUp className="h-4 w-4 text-slate-500" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{formatCurrency(totalContributed)}</div>
@@ -215,7 +215,7 @@ export default function DashboardPage() {
                 <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200/50 dark:border-slate-700/50 shadow-lg hover:shadow-xl transition-shadow">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-300">Progress</CardTitle>
-                    <div className="h-4 w-4 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500" />
+                    <div className="h-4 w-4 rounded-full bg-gradient-to-r from-rose-500 to-amber-500" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{overallProgress.toFixed(1)}%</div>
@@ -235,17 +235,17 @@ export default function DashboardPage() {
                     <CardTitle className="text-slate-900 dark:text-slate-100">Quick Actions</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    <Button onClick={() => setShowCreateDialog(true)} className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg">
+                    <Button onClick={() => setShowCreateDialog(true)} className="w-full bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white shadow-lg">
                       <Plus className="mr-2 h-4 w-4" />
                       Create New Goal
                     </Button>
-                    <Button variant="outline" asChild className="w-full border-emerald-200 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-700 dark:text-emerald-300 dark:hover:bg-emerald-900/20">
+                    <Button variant="outline" asChild className="w-full border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700/20">
                       <Link href="/goals">
                         <Target className="mr-2 h-4 w-4" />
                         Manage All Goals
                       </Link>
                     </Button>
-                    <Button variant="outline" asChild className="w-full border-purple-200 text-purple-700 hover:bg-purple-50 dark:border-purple-700 dark:text-purple-300 dark:hover:bg-purple-900/20">
+                    <Button variant="outline" asChild className="w-full border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700/20">
                       <Link href="/profile">
                         <Brain className="mr-2 h-4 w-4" />
                         Update Profile
@@ -268,19 +268,19 @@ export default function DashboardPage() {
                         {upcomingDeadlines.slice(0, 3).map((goal) => {
                           const daysLeft = Math.ceil((new Date(goal.deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
                           return (
-                            <div key={goal.id} className="flex items-center justify-between p-3 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-800 rounded-lg border border-slate-200/50 dark:border-slate-600/50">
+                            <div key={goal.id} className="flex items-center justify-between p-3 bg-gradient-to-r from-rose-50 to-amber-50 dark:from-slate-700 dark:to-slate-800 rounded-lg border border-slate-200/50 dark:border-slate-600/50">
                               <div>
                                 <p className="text-sm font-medium text-slate-900 dark:text-slate-100">{goal.name}</p>
                                 <p className="text-xs text-slate-500 dark:text-slate-400">{new Date(goal.deadline).toLocaleDateString()}</p>
                               </div>
-                              <Badge variant={daysLeft <= 7 ? "destructive" : "secondary"} className="bg-gradient-to-r from-orange-500 to-red-500 text-white">
+                              <Badge variant={daysLeft <= 7 ? "destructive" : "secondary"} className="bg-gradient-to-r from-rose-500 to-amber-500 text-white">
                                 {daysLeft} days
                               </Badge>
                             </div>
                           )
                         })}
                         {upcomingDeadlines.length > 3 && (
-                          <Button variant="outline" asChild className="w-full mt-2 border-emerald-200 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-700 dark:text-emerald-300 dark:hover:bg-emerald-900/20">
+                          <Button variant="outline" asChild className="w-full mt-2 border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700/20">
                             <Link href="/goals">
                               View All ({upcomingDeadlines.length})
                             </Link>
@@ -310,7 +310,7 @@ export default function DashboardPage() {
                     <p className="text-slate-500 dark:text-slate-400 mb-6">
                       Complete your profile to get personalized AI-powered goal suggestions
                     </p>
-                    <Button onClick={() => window.location.href = '/goals'} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg">
+                    <Button onClick={() => window.location.href = '/goals'} className="bg-gradient-to-r from-slate-500 to-slate-600 hover:from-slate-600 hover:to-slate-700 text-white shadow-lg">
                       <Brain className="mr-2 h-4 w-4" />
                       Setup Profile
                     </Button>

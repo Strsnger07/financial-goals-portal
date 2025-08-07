@@ -149,12 +149,12 @@ export function GoalCard({ goal, onGoalDeleted }: GoalCardProps) {
 
           <div className="text-sm">
             <p className="text-slate-500 dark:text-slate-400">Remaining</p>
-            <p className="font-semibold text-emerald-600 dark:text-emerald-400">{formatCurrency(remainingAmount)}</p>
+            <p className="font-semibold text-rose-600 dark:text-rose-400">{formatCurrency(remainingAmount)}</p>
           </div>
 
           <div className="flex items-center justify-between">
-            <Badge variant="outline" className="border-emerald-200 text-emerald-700 dark:border-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/20">{goal.category}</Badge>
-            <Button size="sm" onClick={() => setShowContributeDialog(true)} disabled={progressPercentage >= 100} className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg">
+            <Badge variant="outline" className="border-slate-300 text-slate-700 dark:border-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-700/20">{goal.category}</Badge>
+            <Button size="sm" onClick={() => setShowContributeDialog(true)} disabled={progressPercentage >= 100} className="bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white shadow-lg">
               <Plus className="mr-1 h-4 w-4" />
               Add Funds
             </Button>
@@ -167,9 +167,9 @@ export function GoalCard({ goal, onGoalDeleted }: GoalCardProps) {
                 key={milestone}
                 className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
                   goal.milestoneReached?.includes(milestone)
-                    ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg"
+                    ? "bg-gradient-to-r from-rose-500 to-amber-500 text-white shadow-lg"
                     : progressPercentage >= milestone
-                      ? "bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-lg"
+                      ? "bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-lg"
                       : "bg-slate-200 dark:bg-slate-700 text-slate-400"
                 }`}
               >

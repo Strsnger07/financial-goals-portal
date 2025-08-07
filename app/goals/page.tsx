@@ -198,15 +198,15 @@ export default function GoalsPage() {
         <div className="space-y-6">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
-              <Target className="h-8 w-8 text-emerald-600" />
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Financial Goals</h1>
+              <Target className="h-8 w-8 text-rose-500" />
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-rose-500 to-amber-500 bg-clip-text text-transparent">Financial Goals</h1>
             </div>
             <div className="flex items-center space-x-2">
-              <Button variant="outline" onClick={() => setShowProfileSetup(true)} className="border-purple-200 text-purple-700 hover:bg-purple-50 dark:border-purple-700 dark:text-purple-300 dark:hover:bg-purple-900/20">
+              <Button variant="outline" onClick={() => setShowProfileSetup(true)} className="border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700/20">
                 <Settings className="mr-2 h-4 w-4" />
                 Update Profile
               </Button>
-              <Button onClick={() => setShowCreateDialog(true)} className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg">
+              <Button onClick={() => setShowCreateDialog(true)} className="bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white shadow-lg">
                 <Plus className="mr-2 h-4 w-4" />
                 Create Goal
               </Button>
@@ -215,18 +215,18 @@ export default function GoalsPage() {
 
           <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'goals' | 'smart')}>
             <TabsList className="grid w-full grid-cols-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
-              <TabsTrigger value="goals" className="flex items-center space-x-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-teal-500 data-[state=active]:text-white">
+              <TabsTrigger value="goals" className="flex items-center space-x-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-rose-500 data-[state=active]:to-amber-500 data-[state=active]:text-white">
                 <Target className="h-4 w-4" />
                 <span>Your Goals</span>
-                <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200 text-xs px-2 py-1 rounded-full">
+                <span className="bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200 text-xs px-2 py-1 rounded-full">
                   {goals.length}
                 </span>
               </TabsTrigger>
-              <TabsTrigger value="smart" className="flex items-center space-x-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-teal-500 data-[state=active]:text-white">
+              <TabsTrigger value="smart" className="flex items-center space-x-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-rose-500 data-[state=active]:to-amber-500 data-[state=active]:text-white">
                 <Brain className="h-4 w-4" />
                 <span>Smart Recommendations</span>
                 {userProfile && (
-                  <span className="bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 dark:from-purple-900 dark:to-pink-900 dark:text-purple-200 text-xs px-2 py-1 rounded-full">
+                  <span className="bg-gradient-to-r from-slate-100 to-slate-200 text-slate-800 dark:from-slate-700 dark:to-slate-600 dark:text-slate-200 text-xs px-2 py-1 rounded-full">
                     AI
                   </span>
                 )}
@@ -304,7 +304,7 @@ export default function GoalsPage() {
                         setCategoryFilter("all")
                         setStatusFilter("all")
                       }}
-                      className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-700 dark:text-emerald-300 dark:hover:bg-emerald-900/20"
+                      className="border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700/20"
                     >
                       Clear Filters
                     </Button>
@@ -325,12 +325,12 @@ export default function GoalsPage() {
                         }
                       </p>
                       <div className="flex justify-center space-x-3">
-                        <Button onClick={() => setShowCreateDialog(true)} className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg">
+                        <Button onClick={() => setShowCreateDialog(true)} className="bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white shadow-lg">
                           <Plus className="mr-2 h-4 w-4" />
                           Create Goal
                         </Button>
                         {goals.length > 0 && (
-                          <Button variant="outline" onClick={() => setActiveTab('smart')} className="border-purple-200 text-purple-700 hover:bg-purple-50 dark:border-purple-700 dark:text-purple-300 dark:hover:bg-purple-900/20">
+                          <Button variant="outline" onClick={() => setActiveTab('smart')} className="border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700/20">
                             <Brain className="mr-2 h-4 w-4" />
                             Get Smart Suggestions
                           </Button>
@@ -363,7 +363,7 @@ export default function GoalsPage() {
                     <p className="text-slate-500 dark:text-slate-400 mb-6">
                       Complete your profile to get personalized smart recommendations
                     </p>
-                    <Button onClick={() => setShowProfileSetup(true)} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg">
+                    <Button onClick={() => setShowProfileSetup(true)} className="bg-gradient-to-r from-slate-500 to-slate-600 hover:from-slate-600 hover:to-slate-700 text-white shadow-lg">
                       <User className="mr-2 h-4 w-4" />
                       Complete Profile Setup
                     </Button>
