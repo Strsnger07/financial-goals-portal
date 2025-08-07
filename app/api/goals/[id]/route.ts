@@ -1,23 +1,29 @@
 import { type NextRequest, NextResponse } from "next/server"
-
-// For now, we'll create a simple API that works without Firebase server-side
-// In production, you should use Firebase Admin SDK with proper service account
+import { doc, deleteDoc } from "firebase/firestore"
+import { db } from "@/lib/firebase"
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const goalId = params.id
+    const { id: goalId } = await params
 
-    // For now, return success response
-    // In production, delete from Firebase
+    if (!db) {
+      return NextResponse.json({ error: "Firebase not initialized" }, { status: 500 })
+    }
+
+    // Delete the goal from Firebase
+    const goalRef = doc(db, "goals", goalId)
+    await deleteDoc(goalRef)
+
     return NextResponse.json({ 
       success: true, 
       message: "Goal deleted successfully",
       goalId 
     })
   } catch (error) {
+    console.error("Error deleting goal:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

@@ -54,19 +54,22 @@ export function GoalCard({ goal, onGoalDeleted }: GoalCardProps) {
         method: 'DELETE',
       })
 
-      if (response.ok) {
+      const result = await response.json()
+
+      if (response.ok && result.success) {
         toast({
           title: "Goal Deleted",
           description: "Your goal has been successfully deleted.",
         })
         onGoalDeleted?.(goal.id)
       } else {
-        throw new Error("Failed to delete goal")
+        throw new Error(result.error || "Failed to delete goal")
       }
     } catch (error) {
+      console.error("Error deleting goal:", error)
       toast({
         title: "Error",
-        description: "Failed to delete goal. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to delete goal. Please try again.",
         variant: "destructive",
       })
     } finally {
