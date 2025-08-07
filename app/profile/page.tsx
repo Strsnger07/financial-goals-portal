@@ -30,9 +30,10 @@ export default function ProfilePage() {
   })
 
   useEffect(() => {
-    if (!user) return
+    if (!user || !db) return
 
     const fetchUserData = async () => {
+      if (!db) return
       try {
         const userDoc = await getDoc(doc(db, "users", user.uid))
         if (userDoc.exists()) {
@@ -52,6 +53,8 @@ export default function ProfilePage() {
         }
       } catch (error) {
         console.error("Error fetching user data:", error)
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -60,9 +63,9 @@ export default function ProfilePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!user) return
+    if (!user || !db) return
 
-    setLoading(true)
+    setSaving(true)
     try {
       // Update Firebase Auth profile
       await updateProfile(user, {
@@ -70,32 +73,6 @@ export default function ProfilePage() {
       })
 
       // Update Firestore user document
-      await updateDoc(doc(db, "users", user.uid), {
-        name: formData.name,
-        currency: formData.currency,
-      })
-
-      toast({
-        title: "Success",
-        description: "Profile updated successfully!",
-      })
-    } catch (error) {
-      console.error("Error updating profile:", error)
-      toast({
-        title: "Error",
-        description: "Failed to update profile",
-        variant: "destructive",
-      })
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleSave = async () => {
-    if (!user) return
-
-    setSaving(true)
-    try {
       await updateDoc(doc(db, "users", user.uid), {
         name: formData.name,
         currency: formData.currency,
@@ -109,6 +86,7 @@ export default function ProfilePage() {
         description: "Profile updated successfully!",
       })
     } catch (error) {
+      console.error("Error updating profile:", error)
       toast({
         title: "Error",
         description: "Failed to update profile",
@@ -117,6 +95,18 @@ export default function ProfilePage() {
     } finally {
       setSaving(false)
     }
+  }
+
+  if (loading) {
+    return (
+      <ProtectedRoute>
+        <DashboardLayout>
+          <div className="flex items-center justify-center h-64">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+          </div>
+        </DashboardLayout>
+      </ProtectedRoute>
+    )
   }
 
   return (
@@ -177,8 +167,8 @@ export default function ProfilePage() {
                   </Select>
                 </div>
 
-                <Button type="submit" disabled={loading} className="w-full">
-                  {loading ? "Updating..." : "Update Profile"}
+                <Button type="submit" disabled={saving} className="w-full">
+                  {saving ? "Updating..." : "Update Profile"}
                 </Button>
               </form>
             </CardContent>
