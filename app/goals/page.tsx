@@ -5,7 +5,6 @@ import { DashboardLayout } from "@/components/dashboard-layout"
 import { GoalCard } from "@/components/goal-card"
 import { GoalCharts } from "@/components/goal-charts"
 import { CreateGoalDialog } from "@/components/create-goal-dialog"
-import { SmartRecommendations } from "@/components/smart-recommendations"
 import { UserProfileSetup } from "@/components/user-profile-setup"
 import { useAuth } from "@/components/auth-provider"
 import { useEffect, useState } from "react"
@@ -13,7 +12,7 @@ import { collection, query, where, onSnapshot, doc, setDoc, getDoc } from "fireb
 import { db } from "@/lib/firebase"
 import { Button } from "@/components/ui/button"
 import { Plus, Target, Brain, User, Settings, Filter, Search } from "lucide-react"
-import { UserProfile, GoalSuggestion } from "@/lib/smart-recommendations"
+import { UserProfile } from "@/lib/smart-recommendations"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
@@ -100,32 +99,6 @@ export default function GoalsPage() {
       setShowProfileSetup(false)
     } catch (error) {
       console.error("Error saving user profile:", error)
-    }
-  }
-
-  const handleSmartGoalCreate = async (suggestion: GoalSuggestion) => {
-    if (!user || !db) return
-
-    const newGoal = {
-      name: suggestion.name,
-      targetAmount: suggestion.suggestedAmount,
-      deadline: new Date(Date.now() + suggestion.timeToComplete * 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      category: suggestion.category,
-      progress: 0,
-      contributed: 0,
-      createdAt: new Date(),
-      milestoneReached: [],
-      userId: user.uid,
-      type: suggestion.type,
-      confidence: suggestion.confidence,
-      reasoning: suggestion.reasoning
-    }
-
-    try {
-      await setDoc(doc(collection(db, "goals")), newGoal)
-      setShowCreateDialog(false)
-    } catch (error) {
-      console.error("Error creating goal:", error)
     }
   }
 
@@ -349,27 +322,24 @@ export default function GoalsPage() {
             </TabsContent>
 
             <TabsContent value="smart" className="space-y-6">
-              {userProfile ? (
-                <SmartRecommendations
-                  userProfile={userProfile}
-                  existingGoals={[]}
-                  onGoalCreate={handleSmartGoalCreate}
-                />
-              ) : (
-                <Card className="bg-[#FBF3D5]/80 dark:bg-[#415E72]/80 backdrop-blur-sm border-[#C5B0CD]/50 shadow-lg">
-                  <CardContent className="text-center py-12">
-                    <User className="mx-auto h-12 w-12 text-[#C5B0CD] mb-4" />
-                    <h3 className="text-lg font-semibold mb-2 text-[#415E72] dark:text-white">Profile Setup Required</h3>
-                    <p className="text-[#C5B0CD] mb-6">
-                      Complete your profile to get personalized smart recommendations
-                    </p>
+              <Card className="bg-[#FBF3D5]/80 dark:bg-[#415E72]/80 backdrop-blur-sm border-[#C5B0CD]/50 shadow-lg">
+                <CardContent className="text-center py-12">
+                  <Brain className="mx-auto h-12 w-12 text-[#C5B0CD] mb-4" />
+                  <h3 className="text-lg font-semibold mb-2 text-[#415E72] dark:text-white">Smart Recommendations</h3>
+                  <p className="text-[#C5B0CD] mb-6">
+                    {userProfile 
+                      ? "Smart recommendations feature is temporarily disabled. Please use the Goals tab to manage your goals."
+                      : "Complete your profile to get personalized smart recommendations"
+                    }
+                  </p>
+                  {!userProfile && (
                     <Button onClick={() => setShowProfileSetup(true)} className="bg-gradient-to-r from-[#B9375D] to-[#D25D5D] hover:from-[#B9375D]/90 hover:to-[#D25D5D]/90 text-white shadow-lg">
                       <User className="mr-2 h-4 w-4" />
                       Complete Profile Setup
                     </Button>
-                  </CardContent>
-                </Card>
-              )}
+                  )}
+                </CardContent>
+              </Card>
             </TabsContent>
           </Tabs>
 
