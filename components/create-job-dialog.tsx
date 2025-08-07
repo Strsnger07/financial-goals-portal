@@ -92,7 +92,7 @@ export function CreateJobDialog({ open, onOpenChange }: CreateJobDialogProps) {
       })
       setRequirements([])
       onOpenChange(false)
-    } catch (error) {
+    } catch (err) {
       toast({
         title: "Error",
         description: "Failed to post job",

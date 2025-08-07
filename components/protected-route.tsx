@@ -10,12 +10,20 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const router = useRouter()
 
   useEffect(() => {
+    console.log("ProtectedRoute useEffect", { user, loading, path: window.location.pathname })
     if (!loading && !user) {
-      router.push("/auth/login")
+      console.log("No authenticated user, redirecting to login")
+      try {
+        router.push("/auth/login")
+        console.log("Router.push called for /auth/login")
+      } catch (error) {
+        console.error("Error redirecting to login:", error)
+      }
     }
   }, [user, loading, router])
 
   if (loading) {
+    console.log("ProtectedRoute loading")
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
@@ -24,8 +32,10 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }
 
   if (!user) {
+    console.log("ProtectedRoute: No user, returning null")
     return null
   }
 
+  console.log("ProtectedRoute: User authenticated, rendering children")
   return <>{children}</>
 }

@@ -62,7 +62,7 @@ export function ApplyJobDialog({ job, open, onOpenChange }: ApplyJobDialogProps)
 
       setCoverLetter("")
       onOpenChange(false)
-    } catch (error) {
+    } catch (err) {
       toast({
         title: "Error",
         description: "Failed to submit application",
