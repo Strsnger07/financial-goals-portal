@@ -123,6 +123,10 @@ export default function GoalsPage() {
     }
   }
 
+  const handleGoalDeleted = (goalId: string) => {
+    setGoals(prevGoals => prevGoals.filter(goal => goal.id !== goalId))
+  }
+
   if (loading) {
     return (
       <ProtectedRoute>
@@ -224,7 +228,7 @@ export default function GoalsPage() {
                 ) : (
                   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {goals.map((goal) => (
-                      <GoalCard key={goal.id} goal={goal} />
+                      <GoalCard key={goal.id} goal={goal} onGoalDeleted={handleGoalDeleted} />
                     ))}
                   </div>
                 )}
@@ -235,7 +239,7 @@ export default function GoalsPage() {
               {userProfile ? (
                 <SmartRecommendations
                   userProfile={userProfile}
-                  existingGoals={goals}
+                  existingGoals={[]}
                   onGoalCreate={handleSmartGoalCreate}
                 />
               ) : (

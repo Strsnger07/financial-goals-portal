@@ -5,10 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { Plus, Calendar } from "lucide-react"
+import { Plus, Calendar, Trash2, AlertTriangle } from "lucide-react"
 import { ContributeDialog } from "@/components/contribute-dialog"
 import { MilestoneAnimation } from "@/components/milestone-animation"
 import { useCurrency } from "@/contexts/currency-context"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
+import { useToast } from "@/hooks/use-toast"
 
 interface Goal {
   id: string
@@ -24,12 +26,15 @@ interface Goal {
 
 interface GoalCardProps {
   goal: Goal
+  onGoalDeleted?: (goalId: string) => void
 }
 
-export function GoalCard({ goal }: GoalCardProps) {
+export function GoalCard({ goal, onGoalDeleted }: GoalCardProps) {
   const [showContributeDialog, setShowContributeDialog] = useState(false)
   const [showMilestone, setShowMilestone] = useState<number | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
   const { formatCurrency } = useCurrency()
+  const { toast } = useToast()
 
   const progressPercentage = (goal.contributed / goal.targetAmount) * 100
   const remainingAmount = goal.targetAmount - goal.contributed
@@ -42,13 +47,76 @@ export function GoalCard({ goal }: GoalCardProps) {
     return <Badge variant="secondary">Active</Badge>
   }
 
+  const handleDeleteGoal = async () => {
+    setIsDeleting(true)
+    try {
+      const response = await fetch(`/api/goals/${goal.id}`, {
+        method: 'DELETE',
+      })
+
+      if (response.ok) {
+        toast({
+          title: "Goal Deleted",
+          description: "Your goal has been successfully deleted.",
+        })
+        onGoalDeleted?.(goal.id)
+      } else {
+        throw new Error("Failed to delete goal")
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete goal. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
   return (
     <>
       <Card className="hover:shadow-lg transition-shadow bg-gray-900 border-gray-700">
         <CardHeader>
           <div className="flex justify-between items-start">
             <CardTitle className="text-lg text-gray-100">{goal.name}</CardTitle>
-            {getStatusBadge()}
+            <div className="flex items-center space-x-2">
+              {getStatusBadge()}
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="h-8 w-8 p-0 text-red-400 hover:text-red-300 hover:bg-red-900/20"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="bg-gray-900 border-gray-700">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="text-gray-100 flex items-center">
+                      <AlertTriangle className="h-5 w-5 text-red-400 mr-2" />
+                      Delete Goal
+                    </AlertDialogTitle>
+                    <AlertDialogDescription className="text-gray-300">
+                      Are you sure you want to delete "{goal.name}"? This action cannot be undone and all progress will be lost.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel className="bg-gray-800 border-gray-600 text-gray-300 hover:bg-gray-700">
+                      Cancel
+                    </AlertDialogCancel>
+                    <AlertDialogAction 
+                      onClick={handleDeleteGoal}
+                      disabled={isDeleting}
+                      className="bg-red-600 hover:bg-red-700 text-white"
+                    >
+                      {isDeleting ? "Deleting..." : "Delete Goal"}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
           </div>
           <div className="flex items-center text-sm text-gray-400">
             <Calendar className="mr-1 h-4 w-4" />

@@ -106,6 +106,10 @@ export default function DashboardPage() {
     }
   }
 
+  const handleGoalDeleted = (goalId: string) => {
+    setGoals(prevGoals => prevGoals.filter(goal => goal.id !== goalId))
+  }
+
   if (loading) {
     return (
       <ProtectedRoute>
@@ -176,7 +180,7 @@ export default function DashboardPage() {
                 ) : (
                   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {goals.map((goal) => (
-                      <GoalCard key={goal.id} goal={goal} />
+                      <GoalCard key={goal.id} goal={goal} onGoalDeleted={handleGoalDeleted} />
                     ))}
                   </div>
                 )}
