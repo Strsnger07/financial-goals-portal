@@ -129,7 +129,7 @@ export default function GoalsPage() {
   })
 
   // Get unique categories for filter
-  const categories = Array.from(new Set(goals.map(goal => goal.category)))
+  const categories = Array.from(new Set(goals.map(goal => goal.category).filter(category => category && category.trim() !== '')))
 
   if (loading) {
     return (
@@ -238,7 +238,7 @@ export default function GoalsPage() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="all">All Categories</SelectItem>
-                          {categories.map(category => (
+                          {categories.filter(category => category && category.trim() !== '').map(category => (
                             <SelectItem key={category} value={category}>{category}</SelectItem>
                           ))}
                         </SelectContent>
