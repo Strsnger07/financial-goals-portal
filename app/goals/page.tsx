@@ -198,15 +198,15 @@ export default function GoalsPage() {
         <div className="space-y-6">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
-              <Target className="h-8 w-8 text-blue-600" />
-              <h1 className="text-3xl font-bold">Financial Goals</h1>
+              <Target className="h-8 w-8 text-emerald-600" />
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Financial Goals</h1>
             </div>
             <div className="flex items-center space-x-2">
-              <Button variant="outline" onClick={() => setShowProfileSetup(true)}>
+              <Button variant="outline" onClick={() => setShowProfileSetup(true)} className="border-purple-200 text-purple-700 hover:bg-purple-50 dark:border-purple-700 dark:text-purple-300 dark:hover:bg-purple-900/20">
                 <Settings className="mr-2 h-4 w-4" />
                 Update Profile
               </Button>
-              <Button onClick={() => setShowCreateDialog(true)}>
+              <Button onClick={() => setShowCreateDialog(true)} className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg">
                 <Plus className="mr-2 h-4 w-4" />
                 Create Goal
               </Button>
@@ -214,19 +214,19 @@ export default function GoalsPage() {
           </div>
 
           <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'goals' | 'smart')}>
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="goals" className="flex items-center space-x-2">
+            <TabsList className="grid w-full grid-cols-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
+              <TabsTrigger value="goals" className="flex items-center space-x-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-teal-500 data-[state=active]:text-white">
                 <Target className="h-4 w-4" />
                 <span>Your Goals</span>
-                <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200 text-xs px-2 py-1 rounded-full">
                   {goals.length}
                 </span>
               </TabsTrigger>
-              <TabsTrigger value="smart" className="flex items-center space-x-2">
+              <TabsTrigger value="smart" className="flex items-center space-x-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-teal-500 data-[state=active]:text-white">
                 <Brain className="h-4 w-4" />
                 <span>Smart Recommendations</span>
                 {userProfile && (
-                  <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
+                  <span className="bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 dark:from-purple-900 dark:to-pink-900 dark:text-purple-200 text-xs px-2 py-1 rounded-full">
                     AI
                   </span>
                 )}
@@ -235,9 +235,9 @@ export default function GoalsPage() {
 
             <TabsContent value="goals" className="space-y-6">
               {/* Filters */}
-              <Card className="bg-gray-900 border-gray-700">
+              <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200/50 dark:border-slate-700/50 shadow-lg">
                 <CardHeader>
-                  <CardTitle className="text-gray-100 flex items-center">
+                  <CardTitle className="text-slate-900 dark:text-slate-100 flex items-center">
                     <Filter className="mr-2 h-4 w-4" />
                     Filter Goals
                   </CardTitle>
@@ -245,22 +245,22 @@ export default function GoalsPage() {
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-300">Search</label>
+                      <label className="text-sm font-medium text-slate-600 dark:text-slate-300">Search</label>
                       <div className="relative">
-                        <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                        <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                         <Input
                           placeholder="Search goals..."
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
-                          className="pl-10 bg-gray-800 border-gray-700 text-gray-100"
+                          className="pl-10 bg-white/50 dark:bg-slate-700/50 border-slate-200/50 dark:border-slate-600/50 text-slate-900 dark:text-slate-100"
                         />
                       </div>
                     </div>
                     
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-300">Category</label>
+                      <label className="text-sm font-medium text-slate-600 dark:text-slate-300">Category</label>
                       <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                        <SelectTrigger className="bg-gray-800 border-gray-700 text-gray-100">
+                        <SelectTrigger className="bg-white/50 dark:bg-slate-700/50 border-slate-200/50 dark:border-slate-600/50 text-slate-900 dark:text-slate-100">
                           <SelectValue placeholder="All categories" />
                         </SelectTrigger>
                         <SelectContent>
@@ -273,9 +273,9 @@ export default function GoalsPage() {
                     </div>
                     
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-300">Status</label>
+                      <label className="text-sm font-medium text-slate-600 dark:text-slate-300">Status</label>
                       <Select value={statusFilter} onValueChange={setStatusFilter}>
-                        <SelectTrigger className="bg-gray-800 border-gray-700 text-gray-100">
+                        <SelectTrigger className="bg-white/50 dark:bg-slate-700/50 border-slate-200/50 dark:border-slate-600/50 text-slate-900 dark:text-slate-100">
                           <SelectValue placeholder="All statuses" />
                         </SelectTrigger>
                         <SelectContent>
@@ -293,7 +293,7 @@ export default function GoalsPage() {
               {/* Goals Grid */}
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <h2 className="text-2xl font-semibold text-gray-100">
+                  <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
                     Your Goals ({filteredGoals.length})
                   </h2>
                   {filteredGoals.length !== goals.length && (
@@ -304,6 +304,7 @@ export default function GoalsPage() {
                         setCategoryFilter("all")
                         setStatusFilter("all")
                       }}
+                      className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-700 dark:text-emerald-300 dark:hover:bg-emerald-900/20"
                     >
                       Clear Filters
                     </Button>
@@ -311,25 +312,25 @@ export default function GoalsPage() {
                 </div>
                 
                 {filteredGoals.length === 0 ? (
-                  <Card className="bg-gray-900 border-gray-700">
+                  <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200/50 dark:border-slate-700/50 shadow-lg">
                     <CardContent className="text-center py-12">
-                      <Target className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                      <h3 className="text-lg font-semibold mb-2 text-gray-100">
+                      <Target className="mx-auto h-12 w-12 text-slate-400 mb-4" />
+                      <h3 className="text-lg font-semibold mb-2 text-slate-900 dark:text-slate-100">
                         {goals.length === 0 ? "No goals created yet" : "No goals match your filters"}
                       </h3>
-                      <p className="text-gray-400 mb-6">
+                      <p className="text-slate-500 dark:text-slate-400 mb-6">
                         {goals.length === 0 
                           ? "Start by creating your first financial goal"
                           : "Try adjusting your search or filters"
                         }
                       </p>
                       <div className="flex justify-center space-x-3">
-                        <Button onClick={() => setShowCreateDialog(true)}>
+                        <Button onClick={() => setShowCreateDialog(true)} className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg">
                           <Plus className="mr-2 h-4 w-4" />
                           Create Goal
                         </Button>
                         {goals.length > 0 && (
-                          <Button variant="outline" onClick={() => setActiveTab('smart')}>
+                          <Button variant="outline" onClick={() => setActiveTab('smart')} className="border-purple-200 text-purple-700 hover:bg-purple-50 dark:border-purple-700 dark:text-purple-300 dark:hover:bg-purple-900/20">
                             <Brain className="mr-2 h-4 w-4" />
                             Get Smart Suggestions
                           </Button>
@@ -355,14 +356,14 @@ export default function GoalsPage() {
                   onGoalCreate={handleSmartGoalCreate}
                 />
               ) : (
-                <Card className="bg-gray-900 border-gray-700">
+                <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200/50 dark:border-slate-700/50 shadow-lg">
                   <CardContent className="text-center py-12">
-                    <User className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                    <h3 className="text-lg font-semibold mb-2 text-gray-100">Profile Setup Required</h3>
-                    <p className="text-gray-500 mb-6">
+                    <User className="mx-auto h-12 w-12 text-slate-400 mb-4" />
+                    <h3 className="text-lg font-semibold mb-2 text-slate-900 dark:text-slate-100">Profile Setup Required</h3>
+                    <p className="text-slate-500 dark:text-slate-400 mb-6">
                       Complete your profile to get personalized smart recommendations
                     </p>
-                    <Button onClick={() => setShowProfileSetup(true)}>
+                    <Button onClick={() => setShowProfileSetup(true)} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg">
                       <User className="mr-2 h-4 w-4" />
                       Complete Profile Setup
                     </Button>

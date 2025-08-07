@@ -1,18 +1,32 @@
 "use client"
 
-import type React from "react"
-import { useAuth } from "@/components/auth-provider"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { LayoutDashboard, Target, User, LogOut, Menu } from "lucide-react"
+import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useState } from "react"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useAuth } from "@/components/auth-provider"
+import { 
+  Home, 
+  Target, 
+  User, 
+  LogOut,
+  Menu,
+  X,
+  TrendingUp,
+  Settings
+} from "lucide-react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Dashboard", href: "/dashboard", icon: Home },
   { name: "Goals", href: "/goals", icon: Target },
   { name: "Profile", href: "/profile", icon: User },
 ]
@@ -22,87 +36,167 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
-  const Sidebar = ({ mobile = false }: { mobile?: boolean }) => (
-    <div className={`flex flex-col h-full bg-gray-900 ${mobile ? "p-4" : "p-6"}`}>
-      <div className="flex items-center mb-8">
-        <h2 className="text-xl font-bold text-blue-400">FinGoals</h2>
-      </div>
-      <nav className="flex-1 space-y-2">
-        {navigation.map((item) => {
-          const isActive = pathname === item.href
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isActive ? "bg-blue-900 text-blue-200" : "text-gray-300 hover:bg-gray-800"
-              }`}
-              onClick={() => mobile && setSidebarOpen(false)}
-            >
-              <item.icon className="mr-3 h-5 w-5" />
-              {item.name}
-            </Link>
-          )
-        })}
-      </nav>
-    </div>
-  )
+  const handleSignOut = async () => {
+    try {
+      await logout()
+    } catch (error) {
+      console.error("Error signing out:", error)
+    }
+  }
 
   return (
-    <div className="min-h-screen bg-gray-950">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-blue-950 dark:to-indigo-950">
       {/* Mobile sidebar */}
-      <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
-        <SheetTrigger asChild>
-          <Button variant="ghost" size="icon" className="md:hidden fixed top-4 left-4 z-50 text-gray-300 hover:bg-gray-800">
-            <Menu className="h-6 w-6" />
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="p-0 w-64 bg-gray-900 border-gray-700">
-          <Sidebar mobile />
-        </SheetContent>
-      </Sheet>
+      <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
+        <div className="fixed inset-0 bg-black/50" onClick={() => setSidebarOpen(false)} />
+        <div className="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-emerald-600 to-teal-700 dark:from-emerald-800 dark:to-teal-900 shadow-xl">
+          <div className="flex h-16 items-center justify-between px-6">
+            <h1 className="text-xl font-bold text-white">Financial Goals</h1>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setSidebarOpen(false)}
+              className="text-white hover:bg-white/10"
+            >
+              <X className="h-6 w-6" />
+            </Button>
+          </div>
+          <nav className="px-4 py-6">
+            <ul className="space-y-2">
+              {navigation.map((item) => {
+                const isActive = pathname === item.href
+                return (
+                  <li key={item.name}>
+                    <Link
+                      href={item.href}
+                      className={`flex items-center space-x-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                        isActive
+                          ? "bg-white/20 text-white shadow-lg"
+                          : "text-white/80 hover:bg-white/10 hover:text-white"
+                      }`}
+                      onClick={() => setSidebarOpen(false)}
+                    >
+                      <item.icon className="h-5 w-5" />
+                      <span>{item.name}</span>
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          </nav>
+        </div>
+      </div>
 
       {/* Desktop sidebar */}
-      <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 bg-gray-900 border-r border-gray-700">
-        <Sidebar />
+      <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
+        <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gradient-to-b from-emerald-600 to-teal-700 dark:from-emerald-800 dark:to-teal-900 px-6 pb-4 shadow-xl">
+          <div className="flex h-16 shrink-0 items-center">
+            <h1 className="text-xl font-bold text-white">Financial Goals</h1>
+          </div>
+          <nav className="flex flex-1 flex-col">
+            <ul role="list" className="flex flex-1 flex-col gap-y-7">
+              <li>
+                <ul role="list" className="-mx-2 space-y-1">
+                  {navigation.map((item) => {
+                    const isActive = pathname === item.href
+                    return (
+                      <li key={item.name}>
+                        <Link
+                          href={item.href}
+                          className={`group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 transition-all duration-200 ${
+                            isActive
+                              ? "bg-white/20 text-white shadow-lg ring-2 ring-white/30"
+                              : "text-white/80 hover:bg-white/10 hover:text-white"
+                          }`}
+                        >
+                          <item.icon className="h-6 w-6 shrink-0" />
+                          {item.name}
+                        </Link>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
 
       {/* Main content */}
-      <div className="md:pl-64">
-        <div className="sticky top-0 z-40 bg-gray-900 border-b border-gray-700 px-4 py-4">
-          <div className="flex justify-between items-center">
-            <div className="md:hidden">
-              <h1 className="text-xl font-semibold text-blue-400">FinGoals</h1>
-            </div>
-            <div className="ml-auto">
+      <div className="lg:pl-64">
+        {/* Top bar */}
+        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-slate-200/20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+          <Button
+            type="button"
+            variant="ghost"
+            className="-m-2.5 p-2.5 text-slate-700 dark:text-slate-300 lg:hidden"
+            onClick={() => setSidebarOpen(true)}
+          >
+            <span className="sr-only">Open sidebar</span>
+            <Menu className="h-6 w-6" />
+          </Button>
+
+          <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
+            <div className="flex flex-1"></div>
+            <div className="flex items-center gap-x-4 lg:gap-x-6">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 rounded-full text-gray-300 hover:bg-gray-800">
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={user?.photoURL || ""} />
-                      <AvatarFallback className="bg-blue-900 text-blue-200">
+                      <AvatarImage src={user?.photoURL || ""} alt={user?.displayName || ""} />
+                      <AvatarFallback className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white">
                         {user?.displayName?.charAt(0) || user?.email?.charAt(0) || "U"}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-gray-800 border-gray-700">
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">
+                        {user?.displayName || "User"}
+                      </p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {user?.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link href="/profile">
+                    <Link href="/profile" className="flex items-center">
                       <User className="mr-2 h-4 w-4" />
                       Profile
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={logout}>
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard" className="flex items-center">
+                      <TrendingUp className="mr-2 h-4 w-4" />
+                      Dashboard
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/goals" className="flex items-center">
+                      <Target className="mr-2 h-4 w-4" />
+                      Goals
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut} className="text-red-600 dark:text-red-400">
                     <LogOut className="mr-2 h-4 w-4" />
-                    Logout
+                    Sign out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
           </div>
         </div>
-        <main className="p-6 bg-gray-950">{children}</main>
+
+        {/* Page content */}
+        <main className="py-6">
+          <div className="px-4 sm:px-6 lg:px-8">
+            {children}
+          </div>
+        </main>
       </div>
     </div>
   )

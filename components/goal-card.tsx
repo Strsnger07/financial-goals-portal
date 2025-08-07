@@ -79,40 +79,40 @@ export function GoalCard({ goal, onGoalDeleted }: GoalCardProps) {
 
   return (
     <>
-      <Card className="hover:shadow-lg transition-shadow bg-gray-900 border-gray-700">
+      <Card className="hover:shadow-xl transition-all duration-300 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm border-slate-200/50 dark:border-slate-700/50 shadow-lg hover:scale-105">
         <CardHeader>
           <div className="flex justify-between items-start">
-            <CardTitle className="text-lg text-gray-100">{goal.name}</CardTitle>
+            <CardTitle className="text-lg text-slate-900 dark:text-slate-100">{goal.name}</CardTitle>
             <div className="flex items-center space-x-2">
               {getStatusBadge()}
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     className="h-8 w-8 p-0 text-red-400 hover:text-red-300 hover:bg-red-900/20"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </AlertDialogTrigger>
-                <AlertDialogContent className="bg-gray-900 border-gray-700">
+                <AlertDialogContent className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm border-slate-200/50 dark:border-slate-700/50">
                   <AlertDialogHeader>
-                    <AlertDialogTitle className="text-gray-100 flex items-center">
+                    <AlertDialogTitle className="text-slate-900 dark:text-slate-100 flex items-center">
                       <AlertTriangle className="h-5 w-5 text-red-400 mr-2" />
                       Delete Goal
                     </AlertDialogTitle>
-                    <AlertDialogDescription className="text-gray-300">
+                    <AlertDialogDescription className="text-slate-600 dark:text-slate-400">
                       Are you sure you want to delete "{goal.name}"? This action cannot be undone and all progress will be lost.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel className="bg-gray-800 border-gray-600 text-gray-300 hover:bg-gray-700">
+                    <AlertDialogCancel className="bg-slate-100 dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600">
                       Cancel
                     </AlertDialogCancel>
-                    <AlertDialogAction 
+                    <AlertDialogAction
                       onClick={handleDeleteGoal}
                       disabled={isDeleting}
-                      className="bg-red-600 hover:bg-red-700 text-white"
+                      className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white shadow-lg"
                     >
                       {isDeleting ? "Deleting..." : "Delete Goal"}
                     </AlertDialogAction>
@@ -121,7 +121,7 @@ export function GoalCard({ goal, onGoalDeleted }: GoalCardProps) {
               </AlertDialog>
             </div>
           </div>
-          <div className="flex items-center text-sm text-gray-400">
+          <div className="flex items-center text-sm text-slate-500 dark:text-slate-400">
             <Calendar className="mr-1 h-4 w-4" />
             {new Date(goal.deadline).toLocaleDateString()}
             {daysLeft >= 0 && <span className="ml-2">({daysLeft} days left)</span>}
@@ -129,32 +129,32 @@ export function GoalCard({ goal, onGoalDeleted }: GoalCardProps) {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <div className="flex justify-between text-sm text-gray-300">
+            <div className="flex justify-between text-sm text-slate-600 dark:text-slate-300">
               <span>Progress</span>
               <span>{progressPercentage.toFixed(1)}%</span>
             </div>
-            <Progress value={progressPercentage} className="h-2" />
+            <Progress value={progressPercentage} className="h-2 bg-slate-200 dark:bg-slate-700" />
           </div>
 
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <p className="text-gray-400">Contributed</p>
-              <p className="font-semibold text-gray-100">{formatCurrency(goal.contributed)}</p>
+              <p className="text-slate-500 dark:text-slate-400">Contributed</p>
+              <p className="font-semibold text-slate-900 dark:text-slate-100">{formatCurrency(goal.contributed)}</p>
             </div>
             <div>
-              <p className="text-gray-400">Target</p>
-              <p className="font-semibold text-gray-100">{formatCurrency(goal.targetAmount)}</p>
+              <p className="text-slate-500 dark:text-slate-400">Target</p>
+              <p className="font-semibold text-slate-900 dark:text-slate-100">{formatCurrency(goal.targetAmount)}</p>
             </div>
           </div>
 
           <div className="text-sm">
-            <p className="text-gray-400">Remaining</p>
-            <p className="font-semibold text-blue-400">{formatCurrency(remainingAmount)}</p>
+            <p className="text-slate-500 dark:text-slate-400">Remaining</p>
+            <p className="font-semibold text-emerald-600 dark:text-emerald-400">{formatCurrency(remainingAmount)}</p>
           </div>
 
           <div className="flex items-center justify-between">
-            <Badge variant="outline" className="border-gray-600 text-gray-300">{goal.category}</Badge>
-            <Button size="sm" onClick={() => setShowContributeDialog(true)} disabled={progressPercentage >= 100}>
+            <Badge variant="outline" className="border-emerald-200 text-emerald-700 dark:border-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/20">{goal.category}</Badge>
+            <Button size="sm" onClick={() => setShowContributeDialog(true)} disabled={progressPercentage >= 100} className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg">
               <Plus className="mr-1 h-4 w-4" />
               Add Funds
             </Button>
@@ -167,10 +167,10 @@ export function GoalCard({ goal, onGoalDeleted }: GoalCardProps) {
                 key={milestone}
                 className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
                   goal.milestoneReached?.includes(milestone)
-                    ? "bg-green-500 text-white"
+                    ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg"
                     : progressPercentage >= milestone
-                      ? "bg-yellow-500 text-white"
-                      : "bg-gray-700 text-gray-400"
+                      ? "bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-lg"
+                      : "bg-slate-200 dark:bg-slate-700 text-slate-400"
                 }`}
               >
                 {milestone === 25 ? "🥉" : milestone === 50 ? "🥈" : "🥇"}
