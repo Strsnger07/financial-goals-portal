@@ -12,10 +12,13 @@ import { useEffect, useState } from "react"
 import { collection, query, where, onSnapshot, doc, setDoc, getDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import { Button } from "@/components/ui/button"
-import { Plus, Target, Brain, User, Settings } from "lucide-react"
+import { Plus, Target, Brain, User, Settings, Filter, Search } from "lucide-react"
 import { UserProfile, GoalSuggestion } from "@/lib/smart-recommendations"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Badge } from "@/components/ui/badge"
 
 interface Goal {
   id: string
@@ -37,6 +40,9 @@ export default function GoalsPage() {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [showProfileSetup, setShowProfileSetup] = useState(false)
   const [activeTab, setActiveTab] = useState<'goals' | 'smart'>('goals')
+  const [searchTerm, setSearchTerm] = useState("")
+  const [categoryFilter, setCategoryFilter] = useState("all")
+  const [statusFilter, setStatusFilter] = useState("all")
 
   useEffect(() => {
     if (!user) return
@@ -127,6 +133,31 @@ export default function GoalsPage() {
     setGoals(prevGoals => prevGoals.filter(goal => goal.id !== goalId))
   }
 
+  // Filter goals based on search and filters
+  const filteredGoals = goals.filter(goal => {
+    const matchesSearch = goal.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         goal.category.toLowerCase().includes(searchTerm.toLowerCase())
+    
+    const matchesCategory = categoryFilter === "all" || goal.category === categoryFilter
+    
+    const progressPercentage = (goal.contributed / goal.targetAmount) * 100
+    const daysLeft = Math.ceil((new Date(goal.deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+    
+    let matchesStatus = true
+    if (statusFilter === "completed") {
+      matchesStatus = progressPercentage >= 100
+    } else if (statusFilter === "active") {
+      matchesStatus = progressPercentage < 100 && daysLeft > 0
+    } else if (statusFilter === "overdue") {
+      matchesStatus = daysLeft < 0
+    }
+
+    return matchesSearch && matchesCategory && matchesStatus
+  })
+
+  // Get unique categories for filter
+  const categories = Array.from(new Set(goals.map(goal => goal.category)))
+
   if (loading) {
     return (
       <ProtectedRoute>
@@ -203,31 +234,112 @@ export default function GoalsPage() {
             </TabsList>
 
             <TabsContent value="goals" className="space-y-6">
-              {goals.length > 0 && <GoalCharts goals={goals} />}
+              {/* Filters */}
+              <Card className="bg-gray-900 border-gray-700">
+                <CardHeader>
+                  <CardTitle className="text-gray-100 flex items-center">
+                    <Filter className="mr-2 h-4 w-4" />
+                    Filter Goals
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-300">Search</label>
+                      <div className="relative">
+                        <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                        <Input
+                          placeholder="Search goals..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="pl-10 bg-gray-800 border-gray-700 text-gray-100"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-300">Category</label>
+                      <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                        <SelectTrigger className="bg-gray-800 border-gray-700 text-gray-100">
+                          <SelectValue placeholder="All categories" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Categories</SelectItem>
+                          {categories.map(category => (
+                            <SelectItem key={category} value={category}>{category}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-300">Status</label>
+                      <Select value={statusFilter} onValueChange={setStatusFilter}>
+                        <SelectTrigger className="bg-gray-800 border-gray-700 text-gray-100">
+                          <SelectValue placeholder="All statuses" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Status</SelectItem>
+                          <SelectItem value="active">Active</SelectItem>
+                          <SelectItem value="completed">Completed</SelectItem>
+                          <SelectItem value="overdue">Overdue</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
 
+              {/* Goals Grid */}
               <div className="space-y-4">
-                <h2 className="text-2xl font-semibold">Your Goals</h2>
-                {goals.length === 0 ? (
-                  <Card>
+                <div className="flex justify-between items-center">
+                  <h2 className="text-2xl font-semibold text-gray-100">
+                    Your Goals ({filteredGoals.length})
+                  </h2>
+                  {filteredGoals.length !== goals.length && (
+                    <Button 
+                      variant="outline" 
+                      onClick={() => {
+                        setSearchTerm("")
+                        setCategoryFilter("all")
+                        setStatusFilter("all")
+                      }}
+                    >
+                      Clear Filters
+                    </Button>
+                  )}
+                </div>
+                
+                {filteredGoals.length === 0 ? (
+                  <Card className="bg-gray-900 border-gray-700">
                     <CardContent className="text-center py-12">
                       <Target className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                      <h3 className="text-lg font-semibold mb-2">No goals created yet</h3>
-                      <p className="text-gray-500 mb-6">Start by creating your first financial goal</p>
+                      <h3 className="text-lg font-semibold mb-2 text-gray-100">
+                        {goals.length === 0 ? "No goals created yet" : "No goals match your filters"}
+                      </h3>
+                      <p className="text-gray-400 mb-6">
+                        {goals.length === 0 
+                          ? "Start by creating your first financial goal"
+                          : "Try adjusting your search or filters"
+                        }
+                      </p>
                       <div className="flex justify-center space-x-3">
                         <Button onClick={() => setShowCreateDialog(true)}>
                           <Plus className="mr-2 h-4 w-4" />
                           Create Goal
                         </Button>
-                        <Button variant="outline" onClick={() => setActiveTab('smart')}>
-                          <Brain className="mr-2 h-4 w-4" />
-                          Get Smart Suggestions
-                        </Button>
+                        {goals.length > 0 && (
+                          <Button variant="outline" onClick={() => setActiveTab('smart')}>
+                            <Brain className="mr-2 h-4 w-4" />
+                            Get Smart Suggestions
+                          </Button>
+                        )}
                       </div>
                     </CardContent>
                   </Card>
                 ) : (
                   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {goals.map((goal) => (
+                    {filteredGoals.map((goal) => (
                       <GoalCard key={goal.id} goal={goal} onGoalDeleted={handleGoalDeleted} />
                     ))}
                   </div>
@@ -243,10 +355,10 @@ export default function GoalsPage() {
                   onGoalCreate={handleSmartGoalCreate}
                 />
               ) : (
-                <Card>
+                <Card className="bg-gray-900 border-gray-700">
                   <CardContent className="text-center py-12">
                     <User className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">Profile Setup Required</h3>
+                    <h3 className="text-lg font-semibold mb-2 text-gray-100">Profile Setup Required</h3>
                     <p className="text-gray-500 mb-6">
                       Complete your profile to get personalized smart recommendations
                     </p>

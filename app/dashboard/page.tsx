@@ -2,7 +2,6 @@
 
 import { ProtectedRoute } from "@/components/protected-route"
 import { DashboardLayout } from "@/components/dashboard-layout"
-import { GoalCard } from "@/components/goal-card"
 import { GoalCharts } from "@/components/goal-charts"
 import { CreateGoalDialog } from "@/components/create-goal-dialog"
 import { SmartRecommendations } from "@/components/smart-recommendations"
@@ -11,10 +10,13 @@ import { useEffect, useState } from "react"
 import { collection, query, where, onSnapshot, doc, getDoc, setDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import { Button } from "@/components/ui/button"
-import { Plus, Brain, Target } from "lucide-react"
+import { Plus, Brain, Target, TrendingUp, Calendar, DollarSign } from "lucide-react"
 import { UserProfile, GoalSuggestion } from "@/lib/smart-recommendations"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Badge } from "@/components/ui/badge"
+import { useCurrency } from "@/contexts/currency-context"
+import Link from "next/link"
 
 interface Goal {
   id: string
@@ -35,6 +37,7 @@ export default function DashboardPage() {
   const [showCreateDialog, setShowCreateDialog] = useState(false)
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [activeTab, setActiveTab] = useState<'overview' | 'smart'>('overview')
+  const { formatCurrency } = useCurrency()
 
   useEffect(() => {
     if (!user) return
@@ -106,9 +109,20 @@ export default function DashboardPage() {
     }
   }
 
-  const handleGoalDeleted = (goalId: string) => {
-    setGoals(prevGoals => prevGoals.filter(goal => goal.id !== goalId))
-  }
+  // Calculate dashboard statistics
+  const totalGoals = goals.length
+  const totalTargetAmount = goals.reduce((sum, goal) => sum + goal.targetAmount, 0)
+  const totalContributed = goals.reduce((sum, goal) => sum + goal.contributed, 0)
+  const overallProgress = totalTargetAmount > 0 ? (totalContributed / totalTargetAmount) * 100 : 0
+  
+  // Get upcoming deadlines (within 30 days)
+  const upcomingDeadlines = goals.filter(goal => {
+    const daysLeft = Math.ceil((new Date(goal.deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+    return daysLeft > 0 && daysLeft <= 30
+  })
+
+  // Get recent goals (last 5)
+  const recentGoals = goals.slice(0, 5)
 
   if (loading) {
     return (
@@ -128,19 +142,27 @@ export default function DashboardPage() {
         <div className="space-y-6 text-gray-100">
           <div className="flex justify-between items-center">
             <h1 className="text-3xl font-bold text-gray-100">Financial Dashboard</h1>
-            <Button onClick={() => setShowCreateDialog(true)}>
-              <Plus className="mr-2 h-4 w-4" />
-              Create Goal
-            </Button>
+            <div className="flex space-x-2">
+              <Button variant="outline" asChild>
+                <Link href="/goals">
+                  <Target className="mr-2 h-4 w-4" />
+                  Manage Goals
+                </Link>
+              </Button>
+              <Button onClick={() => setShowCreateDialog(true)}>
+                <Plus className="mr-2 h-4 w-4" />
+                Create Goal
+              </Button>
+            </div>
           </div>
 
           <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'overview' | 'smart')}>
             <TabsList className="grid w-full grid-cols-2 bg-gray-800">
               <TabsTrigger value="overview" className="flex items-center space-x-2">
-                <Target className="h-4 w-4" />
+                <TrendingUp className="h-4 w-4" />
                 <span>Overview</span>
                 <span className="bg-blue-900 text-blue-200 text-xs px-2 py-1 rounded-full">
-                  {goals.length}
+                  {totalGoals}
                 </span>
               </TabsTrigger>
               <TabsTrigger value="smart" className="flex items-center space-x-2">
@@ -155,35 +177,121 @@ export default function DashboardPage() {
             </TabsList>
 
             <TabsContent value="overview" className="space-y-6">
+              {/* Summary Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Card className="bg-gray-900 border-gray-700">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium text-gray-300">Total Goals</CardTitle>
+                    <Target className="h-4 w-4 text-blue-400" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-gray-100">{totalGoals}</div>
+                    <p className="text-xs text-gray-400">Active financial goals</p>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-gray-900 border-gray-700">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium text-gray-300">Total Target</CardTitle>
+                    <DollarSign className="h-4 w-4 text-green-400" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-gray-100">{formatCurrency(totalTargetAmount)}</div>
+                    <p className="text-xs text-gray-400">Combined target amount</p>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-gray-900 border-gray-700">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium text-gray-300">Total Saved</CardTitle>
+                    <TrendingUp className="h-4 w-4 text-green-400" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-gray-100">{formatCurrency(totalContributed)}</div>
+                    <p className="text-xs text-gray-400">Total contributions</p>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-gray-900 border-gray-700">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium text-gray-300">Progress</CardTitle>
+                    <div className="h-4 w-4 rounded-full bg-blue-400" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-gray-100">{overallProgress.toFixed(1)}%</div>
+                    <p className="text-xs text-gray-400">Overall completion</p>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Charts */}
               {goals.length > 0 && <GoalCharts goals={goals} />}
 
-              <div className="space-y-4">
-                <h2 className="text-2xl font-semibold text-gray-100">Your Goals</h2>
-                {goals.length === 0 ? (
-                  <Card className="bg-gray-900 border-gray-700">
-                    <CardContent className="text-center py-12">
-                      <Target className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                      <h3 className="text-lg font-semibold mb-2 text-gray-100">No goals created yet</h3>
-                      <p className="text-gray-400 mb-6">Start by creating your first financial goal</p>
-                      <div className="flex justify-center space-x-3">
-                        <Button onClick={() => setShowCreateDialog(true)}>
-                          <Plus className="mr-2 h-4 w-4" />
-                          Create Goal
-                        </Button>
-                        <Button variant="outline" onClick={() => setActiveTab('smart')}>
-                          <Brain className="mr-2 h-4 w-4" />
-                          Get Smart Suggestions
-                        </Button>
+              {/* Quick Actions and Recent Goals */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Quick Actions */}
+                <Card className="bg-gray-900 border-gray-700">
+                  <CardHeader>
+                    <CardTitle className="text-gray-100">Quick Actions</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <Button onClick={() => setShowCreateDialog(true)} className="w-full">
+                      <Plus className="mr-2 h-4 w-4" />
+                      Create New Goal
+                    </Button>
+                    <Button variant="outline" asChild className="w-full">
+                      <Link href="/goals">
+                        <Target className="mr-2 h-4 w-4" />
+                        Manage All Goals
+                      </Link>
+                    </Button>
+                    <Button variant="outline" asChild className="w-full">
+                      <Link href="/profile">
+                        <Brain className="mr-2 h-4 w-4" />
+                        Update Profile
+                      </Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Upcoming Deadlines */}
+                <Card className="bg-gray-900 border-gray-700">
+                  <CardHeader>
+                    <CardTitle className="text-gray-100 flex items-center">
+                      <Calendar className="mr-2 h-4 w-4" />
+                      Upcoming Deadlines
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {upcomingDeadlines.length > 0 ? (
+                      <div className="space-y-2">
+                        {upcomingDeadlines.slice(0, 3).map((goal) => {
+                          const daysLeft = Math.ceil((new Date(goal.deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+                          return (
+                            <div key={goal.id} className="flex items-center justify-between p-2 bg-gray-800 rounded">
+                              <div>
+                                <p className="text-sm font-medium text-gray-100">{goal.name}</p>
+                                <p className="text-xs text-gray-400">{new Date(goal.deadline).toLocaleDateString()}</p>
+                              </div>
+                              <Badge variant={daysLeft <= 7 ? "destructive" : "secondary"}>
+                                {daysLeft} days
+                              </Badge>
+                            </div>
+                          )
+                        })}
+                        {upcomingDeadlines.length > 3 && (
+                          <Button variant="outline" asChild className="w-full mt-2">
+                            <Link href="/goals">
+                              View All ({upcomingDeadlines.length})
+                            </Link>
+                          </Button>
+                        )}
                       </div>
-                    </CardContent>
-                  </Card>
-                ) : (
-                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {goals.map((goal) => (
-                      <GoalCard key={goal.id} goal={goal} onGoalDeleted={handleGoalDeleted} />
-                    ))}
-                  </div>
-                )}
+                    ) : (
+                      <p className="text-gray-400 text-sm">No upcoming deadlines</p>
+                    )}
+                  </CardContent>
+                </Card>
               </div>
             </TabsContent>
 
@@ -191,7 +299,7 @@ export default function DashboardPage() {
               {userProfile ? (
                 <SmartRecommendations
                   userProfile={userProfile}
-                  existingGoals={goals}
+                  existingGoals={[]}
                   onGoalCreate={handleSmartGoalCreate}
                 />
               ) : (
