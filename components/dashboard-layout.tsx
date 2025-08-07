@@ -45,7 +45,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FBF3D5] via-[#C5B0CD] to-[#415E72] dark:bg-gradient-to-br dark:from-[#415E72] dark:via-[#B9375D] dark:to-[#D25D5D]">
+    <div className="min-h-screen bg-[#F3E2D4] dark:bg-gradient-to-br dark:from-[#415E72] dark:via-[#B9375D] dark:to-[#D25D5D]">
       {/* Mobile sidebar */}
       <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
         <div className="fixed inset-0 bg-black/50" onClick={() => setSidebarOpen(false)} />
@@ -125,7 +125,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       {/* Main content */}
       <div className="lg:pl-64">
         {/* Top bar */}
-        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-[#C5B0CD]/20 bg-[#FBF3D5]/80 dark:bg-[#415E72]/80 backdrop-blur-sm px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-[#C5B0CD]/20 bg-[#F3E2D4]/80 dark:bg-[#415E72]/80 backdrop-blur-sm px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
           <Button
             type="button"
             variant="ghost"
