@@ -139,7 +139,7 @@ export default function DashboardPage() {
   return (
     <ProtectedRoute>
       <DashboardLayout>
-        <div className="space-y-6 text-gray-100">
+        <div className="space-y-6 text-gray-100 bg-[#C5B0CD] p-6 rounded-lg">
           <div className="flex justify-between items-center">
             <h1 className="text-3xl font-bold text-[#B9375D] dark:text-white">Financial Dashboard</h1>
             <div className="flex space-x-2">
