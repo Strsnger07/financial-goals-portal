@@ -11,6 +11,8 @@ import { MilestoneAnimation } from "@/components/milestone-animation"
 import { useCurrency } from "@/contexts/currency-context"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { useToast } from "@/hooks/use-toast"
+import { db } from "@/lib/firebase"
+import { doc, deleteDoc } from "firebase/firestore"
 
 interface Goal {
   id: string
@@ -50,21 +52,19 @@ export function GoalCard({ goal, onGoalDeleted }: GoalCardProps) {
   const handleDeleteGoal = async () => {
     setIsDeleting(true)
     try {
-      const response = await fetch(`/api/goals/${goal.id}`, {
-        method: 'DELETE',
-      })
-
-      const result = await response.json()
-
-      if (response.ok && result.success) {
-        toast({
-          title: "Goal Deleted",
-          description: "Your goal has been successfully deleted.",
-        })
-        onGoalDeleted?.(goal.id)
-      } else {
-        throw new Error(result.error || "Failed to delete goal")
+      if (!db) {
+        throw new Error("Firebase not initialized")
       }
+
+      // Delete directly from Firebase
+      const goalRef = doc(db, "goals", goal.id)
+      await deleteDoc(goalRef)
+
+      toast({
+        title: "Goal Deleted",
+        description: "Your goal has been successfully deleted.",
+      })
+      onGoalDeleted?.(goal.id)
     } catch (error) {
       console.error("Error deleting goal:", error)
       toast({
